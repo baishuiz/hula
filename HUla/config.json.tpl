@@ -1,0 +1,3 @@
+{
+    "mongoURL": "localhost/HULa"
+}
