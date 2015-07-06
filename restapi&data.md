@@ -8,6 +8,15 @@ Service
             ack
             count
             services
+                _id
+                name
+                url
+    get
+        req
+            _id
+        res
+            ack
+            service
                 name
                 url
     post
@@ -16,17 +25,17 @@ Service
             url
         res
             ack
-            id
+            _id
     put
         req
-            id
+            _id
             name
             url
         res
             ack
     delete
         req
-            id
+            _id
         res
             ack
 Contract
@@ -37,7 +46,16 @@ Contract
             ack
             count
             contracts
-                id
+                _id
+                req_json
+                res_json
+    get
+        req
+            _id
+        res
+            ack
+            contract
+                srv_id
                 req_json
                 res_json
     post
@@ -47,10 +65,10 @@ Contract
             res_json
         res
             ack
-            id
+            _id
     put
         req
-            id
+            _id
             srv_id
             req_json
             res_json
@@ -58,7 +76,7 @@ Contract
             ack
     delete
         req
-            id
+            _id
             srv_id
         res
             ack
@@ -70,7 +88,16 @@ Case
             ack
             cont
             cases
-                id
+                _id
+                req_json
+                res_json
+    get
+        req
+            _id
+        res
+            ack
+            case
+                con_id
                 req_json
                 res_json
     post
@@ -80,10 +107,10 @@ Case
             res_json
         res
             ack
-            id
+            _id
     put
         req
-            id
+            _id
             con_id
             req_json
             res_json
@@ -91,7 +118,7 @@ Case
             ack
     delete
         req
-            id
+            _id
             con_id
         res
             ack
@@ -101,16 +128,16 @@ Case
 ##Data
 ```
 Service
-    id
+    _id
     name
     url
 Contract
-    id
+    _id
     srv_id
     req_json
     res_json
 Case
-    id
+    _id
     con_id
     req_json
     res_json

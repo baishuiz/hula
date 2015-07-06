@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var config = require('../config.json');
-var db = mongoose.createConnection('mongodb://' + config.mongoURL || 'localhost/HULa');
+mongoose.connect('mongodb://' + config.mongoURL || 'localhost/HULa');
+var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
