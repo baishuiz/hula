@@ -1,7 +1,7 @@
 ##Rest API
 ```
 Service
-    get
+    get (/restapi/service/)
         req
 
         res
@@ -13,7 +13,7 @@ Service
                 url
                 req_contract
                 res_contract
-    get
+    get (/restapi/service/:_id)
         req
             _id
         res
@@ -23,7 +23,7 @@ Service
                 url
                 req_contract
                 res_contract
-    post
+    post (/restapi/service/)
         req
             name
             url
@@ -32,7 +32,7 @@ Service
         res
             ack
             _id
-    put
+    put (/restapi/service/:_id)
         req
             _id
             name
@@ -41,13 +41,18 @@ Service
             res_contract
         res
             ack
-    delete
+    delete (/restapi/service/)
+        req
+            ids
+        res
+            ack
+    delete (/restapi/service/:_id)
         req
             _id
         res
             ack
 Case
-    get
+    get (/restapi/case/)
         req
             srv_id
         res
@@ -58,7 +63,7 @@ Case
                 name
                 req_json
                 res_json
-    get
+    get (/restapi/case/:_id)
         req
             _id
         res
@@ -68,7 +73,7 @@ Case
                 name
                 req_json
                 res_json
-    post
+    post (/restapi/case/)
         req
             srv_id
             name
@@ -77,7 +82,7 @@ Case
         res
             ack
             _id
-    put
+    put (/restapi/case/:_id)
         req
             _id
             name
@@ -85,7 +90,12 @@ Case
             res_json
         res
             ack
-    delete
+    delete (/restapi/case/)
+        req
+            ids
+        res
+            ack
+    delete (/restapi/case/:_id)
         req
             _id
         res
@@ -104,6 +114,7 @@ Service
 Case
     _id
     srv_id
+    name
     req_contract
     res_contract
 ```
