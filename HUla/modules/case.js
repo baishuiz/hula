@@ -2,21 +2,33 @@ var dbLibs = require('../libs/db');
 var mongoose = dbLibs.mongoose;
 var db = dbLibs.db;
 
-var serviceSchema = new mongoose.Schema({
+var caseSchema = new mongoose.Schema({
+    srv_id: {type: String},
     name: {type: String},
-    url: {type: String},
-    req_contract: {type: String},
-    res_contract: {type: String}
+    req_json: {type: String},
+    res_json: {type: String}
 });
 
-var serviceModel = mongoose.model('Service', serviceSchema);
+var caseModel = mongoose.model('Case', caseSchema);
 
 var isValidId = function (_id) {
     return mongoose.Types.ObjectId.isValid(_id);
 };
 
 var find = function (criteria, projection, callback) {
-    serviceModel.find(criteria || {}, projection || {name: 1, url: 1, req_contract: 1, res_contract: 1}, {}, function(error, result){
+    criteria = criteria || {};
+    var srv_id = criteria && criteria.srv_id;
+
+    if (srv_id) {
+        if (!isValidId(srv_id)) {
+            callback && callback({ message: 'unavailable id' });
+            return;
+        }
+    } else {
+        delete criteria.srv_id;
+    }
+
+    caseModel.find(criteria, projection || {srv_id:1, name: 1, req_json: 1, res_json: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
@@ -27,28 +39,31 @@ var findById = function (_id, projection, callback) {
         return;
     }
 
-    serviceModel.findById(_id, projection || {name: 1, url: 1, req_contract: 1, res_contract: 1}, {}, function(error, result){
+    caseModel.findById(_id, projection || {srv_id: 1, name: 1, req_json: 1, res_json: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
 
 var create = function (doc, callback) {
+    doc = doc || {};
+    var srv_id = doc.srv_id;
     var name = doc.name;
-    var url = doc.url;
-    if (!name || !url) {
+    var req_json = doc.req_json;
+    var res_json = doc.res_json;
+    if (!name || !req_json || !res_json || !isValidId(srv_id)) {
         callback && callback({ message: 'unavailable param' });
         return;
     }
 
-    find({ name: name }, null, function (error, result) {
+    find({ name: name, srv_id: srv_id }, null, function (error, result) {
         if (error) {
                 callback && callback(error, null);
         } else {
             if (result && result.length) {
-                callback && callback({ message: 'service name exist' }, null);
+                callback && callback({ message: 'case name exist' }, null);
             } else {
-                serviceModel.create({ name: name, url: url }, function (error, service) {
-                    callback && callback(error, service && service._id);
+                caseModel.create({ srv_id: srv_id, name: name, req_json: req_json, res_json: res_json }, function (error, caseObj) {
+                    callback && callback(error, caseObj && caseObj._id);
                 });
             }
         }
@@ -64,14 +79,17 @@ var findOneAndUpdate = function (query, doc, options, callback) {
     }
 
     var name = doc.name;
-    var url = doc.url;
-    if ((typeof name !== 'undefined' && !name) || (typeof url !== 'undefined' && !url)) {
+    var req_json = doc.req_json;
+    var res_json = doc.res_json;
+    if ((typeof name !== 'undefined' && !name) ||
+        (typeof req_json !== 'undefined' && !req_json) ||
+        (typeof res_json !== 'undefined' && !res_json)) {
         callback && callback({ message: 'unavailable param' });
         return;
     }
 
-    serviceModel.findOneAndUpdate(query, doc, options, function (error, service) {
-        callback && callback(error, service);
+    caseModel.findOneAndUpdate(query, doc, options, function (error, caseObj) {
+        callback && callback(error, caseObj);
     });
 }
 
@@ -81,8 +99,7 @@ var findByIdAndRemove = function (_id, options, callback) {
         return;
     }
 
-    // TODO 删除时同时删除 case ？
-    serviceModel.findByIdAndRemove(_id, options, function (error) {
+    caseModel.findByIdAndRemove(_id, options, function (error) {
         callback && callback(error);
     });
 }
@@ -92,9 +109,7 @@ var removeAll = function (ids, options, callback) {
         callback && callback({ message: 'unavailable ids' });
         return;
     }
-
-    // TODO 删除时同时删除 case ？
-    serviceModel.remove({ _id: { $in: ids }}, function (error, result){
+    caseModel.remove({ _id: { $in: ids }}, function (error, result){
         callback && callback(error, result);
     });
 }

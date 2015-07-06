@@ -55,8 +55,9 @@ Case
             cont
             cases
                 _id
-                req_contract
-                res_contract
+                name
+                req_json
+                res_json
     get
         req
             _id
@@ -64,21 +65,24 @@ Case
             ack
             case
                 srv_id
-                req_contract
-                res_contract
+                name
+                req_json
+                res_json
     post
         req
             srv_id
-            req_contract
-            res_contract
+            name
+            req_json
+            res_json
         res
             ack
             _id
     put
         req
             _id
-            req_contract
-            res_contract
+            name
+            req_json
+            res_json
         res
             ack
     delete
