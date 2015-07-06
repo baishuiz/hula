@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:_id', function(req, res, next) {
-    serviceModel.findById(req.params._id, { name: 1, url: 1}, function(error, result){
+    serviceModel.findById(req.params._id, null, function(error, result){
         res.json(resHandler({ service: result }, error));
     });
 });
@@ -30,8 +30,15 @@ router.put('/:_id', function(req, res, next) {
     });
 });
 
+router.delete('/', function(req, res, next) {
+    console.log(req.body.ids, 'routes');
+    serviceModel.removeAll(req.body.ids, null, function (error, result) {
+        res.json(resHandler(null, error));
+    });
+});
+
 router.delete('/:_id', function(req, res, next) {
-    serviceModel.findOneAndRemove({ _id: req.params._id }, null, function (error, result) {
+    serviceModel.findByIdAndRemove(req.params._id, null, function (error, result) {
         res.json(resHandler(null, error));
     });
 });

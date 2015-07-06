@@ -11,6 +11,8 @@ Service
                 _id
                 name
                 url
+                req_contract
+                res_contract
     get
         req
             _id
@@ -19,10 +21,14 @@ Service
             service
                 name
                 url
+                req_contract
+                res_contract
     post
         req
             name
             url
+            req_contract
+            res_contract
         res
             ack
             _id
@@ -31,95 +37,53 @@ Service
             _id
             name
             url
+            req_contract
+            res_contract
         res
             ack
     delete
         req
             _id
-        res
-            ack
-Contract
-    get
-        req
-            srv_id
-        res
-            ack
-            count
-            contracts
-                _id
-                req_json
-                res_json
-    get
-        req
-            _id
-        res
-            ack
-            contract
-                srv_id
-                req_json
-                res_json
-    post
-        req
-            srv_id
-            req_json
-            res_json
-        res
-            ack
-            _id
-    put
-        req
-            _id
-            srv_id
-            req_json
-            res_json
-        res
-            ack
-    delete
-        req
-            _id
-            srv_id
         res
             ack
 Case
     get
         req
-            con_id
+            srv_id
         res
             ack
             cont
             cases
                 _id
-                req_json
-                res_json
+                req_contract
+                res_contract
     get
         req
             _id
         res
             ack
             case
-                con_id
-                req_json
-                res_json
+                srv_id
+                req_contract
+                res_contract
     post
         req
-            con_id
-            req_json
-            res_json
+            srv_id
+            req_contract
+            res_contract
         res
             ack
             _id
     put
         req
             _id
-            con_id
-            req_json
-            res_json
+            req_contract
+            res_contract
         res
             ack
     delete
         req
             _id
-            con_id
         res
             ack
 ```
@@ -131,19 +95,16 @@ Service
     _id
     name
     url
-Contract
-    _id
-    srv_id
-    req_json
-    res_json
+    req_contract
+    res_contract
 Case
     _id
-    con_id
-    req_json
-    res_json
+    srv_id
+    req_contract
+    res_contract
 ```
 
-## Contract Format (req_json, res_json)
+## Contract Format (req_contract, res_contract)
 ```javascript
 [{
     "key": "datatp",

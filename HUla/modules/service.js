@@ -4,17 +4,19 @@ var db = dbLibs.db;
 
 var serviceSchema = new mongoose.Schema({
     name: {type: String},
-    url: {type: String}
+    url: {type: String},
+    req_contract: {type: String},
+    res_contract: {type: String}
 });
 
-var serviceModel = mongoose.model('mongoose', serviceSchema);
+var serviceModel = mongoose.model('Service', serviceSchema);
 
 var isValidId = function (_id) {
     return mongoose.Types.ObjectId.isValid(_id);
 };
 
 var find = function (criteria, projection, callback) {
-    serviceModel.find(criteria || {}, projection || {name: 1, url: 1}, {}, function(error, result){
+    serviceModel.find(criteria || {}, projection || {name: 1, url: 1, req_contract: 1, res_contract: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
@@ -25,7 +27,7 @@ var findById = function (_id, projection, callback) {
         return;
     }
 
-    serviceModel.findById(_id, projection || {name: 1, url: 1}, {}, function(error, result){
+    serviceModel.findById(_id, projection || {name: 1, url: 1, req_contract: 1, res_contract: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
@@ -34,7 +36,7 @@ var create = function (doc, callback) {
     var name = doc.name;
     var url = doc.url;
     if (!name || !url) {
-        callback && callback({ message: 'param unavailable' });
+        callback && callback({ message: 'unavailable param' });
         return;
     }
 
@@ -63,26 +65,35 @@ var findOneAndUpdate = function (query, doc, options, callback) {
 
     var name = doc.name;
     var url = doc.url;
-    if (!name || !url) {
-        callback && callback({ message: 'param unavailable' });
+    if ((typeof name !== 'undefined' && !name) || (typeof url !== 'undefined' && !url)) {
+        callback && callback({ message: 'unavailable param' });
         return;
     }
 
-    serviceModel.findOneAndUpdate(query, doc, options, function (error) {
+    serviceModel.findOneAndUpdate(query, doc, options, function (error, service) {
         callback && callback(error, service);
     });
 }
 
-var findOneAndRemove = function (conditions, options, callback) {
-    var _id = conditions && conditions._id;
-
-    if (_id && !isValidId(_id)) {
+var findByIdAndRemove = function (_id, options, callback) {
+    if (!_id || !isValidId(_id)) {
         callback && callback({ message: 'unavailable id' });
         return;
     }
 
-    serviceModel.findOneAndRemove(conditions, options, function (error) {
+    // TODO 删除时同时删除 contract 和 case ？
+    serviceModel.findByIdAndRemove(_id, options, function (error) {
         callback && callback(error);
+    });
+}
+
+var removeAll = function (ids, options, callback) {
+    if (!ids || !ids.length) {
+        callback && callback({ message: 'unavailable ids' });
+        return;
+    }
+    serviceModel.remove({ _id: { $in: ids }}, function (error, result){
+        callback && callback(error, result);
     });
 }
 
@@ -91,5 +102,6 @@ module.exports = {
     findById: findById,
     create: create,
     findOneAndUpdate: findOneAndUpdate,
-    findOneAndRemove: findOneAndRemove
+    findByIdAndRemove: findByIdAndRemove,
+    removeAll: removeAll
 };
