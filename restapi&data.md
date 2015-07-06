@@ -121,6 +121,8 @@ Case
 
 ## Contract Format (req_contract, res_contract)
 ```javascript
+// Type
+// Number, String, Object, List, Array, Boolean
 [{
     "key": "datatp",
     "name": "类型",
