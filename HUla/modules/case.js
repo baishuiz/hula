@@ -5,8 +5,8 @@ var db = dbLibs.db;
 var caseSchema = new mongoose.Schema({
     srv_id: {type: String},
     name: {type: String},
-    req_json: {type: String},
-    res_json: {type: String}
+    req: {type: Array},
+    res: {type: Array}
 });
 
 var caseModel = mongoose.model('Case', caseSchema);
@@ -21,14 +21,14 @@ var find = function (criteria, projection, callback) {
 
     if (srv_id) {
         if (!isValidId(srv_id)) {
-            callback && callback({ message: 'unavailable id' });
+            callback && callback({ stack: 'unavailable id' });
             return;
         }
     } else {
         delete criteria.srv_id;
     }
 
-    caseModel.find(criteria, projection || {srv_id:1, name: 1, req_json: 1, res_json: 1}, {}, function(error, result){
+    caseModel.find(criteria, projection || {srv_id:1, name: 1, req: 1, res: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
@@ -39,7 +39,7 @@ var findById = function (_id, projection, callback) {
         return;
     }
 
-    caseModel.findById(_id, projection || {srv_id: 1, name: 1, req_json: 1, res_json: 1}, {}, function(error, result){
+    caseModel.findById(_id, projection || {srv_id: 1, name: 1, req: 1, res: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
@@ -48,10 +48,10 @@ var create = function (doc, callback) {
     doc = doc || {};
     var srv_id = doc.srv_id;
     var name = doc.name;
-    var req_json = doc.req_json;
-    var res_json = doc.res_json;
-    if (!name || !req_json || !res_json || !isValidId(srv_id)) {
-        callback && callback({ message: 'unavailable param' });
+    var req = doc.req;
+    var res = doc.res;
+    if (!name || !req || !res || !isValidId(srv_id)) {
+        callback && callback({ stack: 'unavailable param' });
         return;
     }
 
@@ -60,9 +60,9 @@ var create = function (doc, callback) {
                 callback && callback(error, null);
         } else {
             if (result && result.length) {
-                callback && callback({ message: 'case name exist' }, null);
+                callback && callback({ stack: 'case name exist' }, null);
             } else {
-                caseModel.create({ srv_id: srv_id, name: name, req_json: req_json, res_json: res_json }, function (error, caseObj) {
+                caseModel.create({ srv_id: srv_id, name: name, req: req, res: res }, function (error, caseObj) {
                     callback && callback(error, caseObj && caseObj._id);
                 });
             }
@@ -74,17 +74,17 @@ var findOneAndUpdate = function (query, doc, options, callback) {
     var _id = query && query._id;
 
     if (_id && !isValidId(_id)) {
-        callback && callback({ message: 'unavailable id' });
+        callback && callback({ stack: 'unavailable id' });
         return;
     }
 
     var name = doc.name;
-    var req_json = doc.req_json;
-    var res_json = doc.res_json;
+    var req = doc.req;
+    var res = doc.res;
     if ((typeof name !== 'undefined' && !name) ||
-        (typeof req_json !== 'undefined' && !req_json) ||
-        (typeof res_json !== 'undefined' && !res_json)) {
-        callback && callback({ message: 'unavailable param' });
+        (typeof req !== 'undefined' && !req) ||
+        (typeof res !== 'undefined' && !res)) {
+        callback && callback({ stack: 'unavailable param' });
         return;
     }
 
@@ -95,7 +95,7 @@ var findOneAndUpdate = function (query, doc, options, callback) {
 
 var findByIdAndRemove = function (_id, options, callback) {
     if (!_id || !isValidId(_id)) {
-        callback && callback({ message: 'unavailable id' });
+        callback && callback({ stack: 'unavailable id' });
         return;
     }
 
@@ -106,7 +106,7 @@ var findByIdAndRemove = function (_id, options, callback) {
 
 var removeAll = function (ids, options, callback) {
     if (!ids || !ids.length) {
-        callback && callback({ message: 'unavailable ids' });
+        callback && callback({ stack: 'unavailable ids' });
         return;
     }
     caseModel.remove({ _id: { $in: ids }}, function (error, result){

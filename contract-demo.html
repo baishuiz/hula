@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+    table {
+        width: 100%;
+        background-color: transparent;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border: 1px solid #ddd;
+        border-collapse: separate;
+        border-left: 0;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        clear: both;
+        margin-bottom: 6px !important;
+        max-width: none !important;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        line-height: 20px;
+        text-align: left;
+        border-top: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+    }
+
+    input {
+        width: 50px;
+    }
+
+    </style>
+</head>
+
+<body>
+    <table id="wrapper">
+        <tr></tr>
+    </table>
+
+    <button class="save">Save</button>
+
+    <script type="text/template" id="tpl">
+        <%
+        var loop = function (ary) {
+            if (!ary || !ary.length) {
+                return;
+            }
+
+            for (var i = 0, len = ary.length, v, isFirst; i < len; i++) {
+                v = ary[i];
+                isFirst = i === 0;
+        %>
+                <tr>
+                    <td>
+                        <input type="text" placeholder="key" value="<%= v.key %>">
+                        <input type="text" placeholder="name" value="<%= v.name %>">
+                        <select value="<%= v.type %>">
+                            <option disabled <%= !v.type && 'selected' || '' %>>Type</option>
+                            <option value="String" <%= v.type === 'String' ?  'selected' : '' %>>String</option>
+                            <option value="Number" <%= v.type === 'Number' ?  'selected' : '' %>>Number</option>
+                            <option value="Boolean" <%= v.type === 'Boolean' ?  'selected' : '' %>>Boolean</option>
+                            <option value="Array" <%= v.type === 'Array' ?  'selected' : '' %>>Array</option>
+                            <option value="Object" <%= v.type === 'Object' ?  'selected' : '' %>>Object</option>
+                            <option value="List" <%= v.type === 'List' ?  'selected' : '' %>>List</option>
+                        </select>
+                        <button class="delete">delete</button>
+                        <button class="add">new line</button>
+                    </td>
+                    <% if (v.type === 'Object' || v.type === 'List') {%>
+                        <td>
+                            <table>
+                                <tbody>
+                                    <% loop(v.value) %>
+                                </tbody>
+                            </table>
+                        </td>
+                    <%}%>
+                </tr>
+            <% }
+        } %>
+
+        <tbody>
+            <% loop(data) %>
+        </tbody>
+    </script>
+
+    <script type="text/template" id="tpl_single">
+        <tr>
+            <td>
+                <input type="text" placeholder="key">
+                <input type="text" placeholder="name">
+                <select>
+                    <option disabled selected>Type</option>
+                    <option value="String">String</option>
+                    <option value="Number">Number</option>
+                    <option value="Boolean">Boolean</option>
+                    <option value="Array">Array</option>
+                    <option value="Object">Object</option>
+                    <option value="List">List</option>
+                </select>
+                <button class="delete">delete</button>
+                <button class="add">new line</button>
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/template" id="tpl_extend">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" placeholder="key">
+                            <input type="text" placeholder="name">
+                            <select>
+                                <option disabled selected>Type</option>
+                                <option value="String">String</option>
+                                <option value="Number">Number</option>
+                                <option value="Boolean">Boolean</option>
+                                <option value="Array">Array</option>
+                                <option value="Object">Object</option>
+                                <option value="List">List</option>
+                            </select>
+                            <button class="delete">delete</button>
+                            <button class="add">new line</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </script>
+
+    <script src="jquery-1.9.1.min.js"></script>
+    <script src="underscore-min.js"></script>
+    <script>
+    // Type
+    // Number, String, Object, List, Array, Boolean
+    var data = [{
+        key: 'datatp',
+        name: '类型',
+        type: 'Number'
+    }, {
+        key: 'promts',
+        name: '促销',
+        type: 'List',
+        value: [{
+            key: 'type',
+            name: '类型',
+            type: 'Number'
+        }, {
+            key: 'amt',
+            name: '金额',
+            type: 'Number'
+        }, {
+            key: 'addinfo',
+            name: '附加信息',
+            type: 'Object',
+            value: [{
+                key: 'id',
+                name: '编号',
+                type: 'String'
+            }, {
+                key: 'title',
+                name: '标题',
+                type: 'String'
+            }]
+        }]
+    }];
+
+    var $wrapper = $('#wrapper');
+    var tpl = $('#tpl').html();
+    var tplFun = _.template(tpl);
+    var tplSingle = $('#tpl_single').html();
+    var tplExtend = $('#tpl_extend').html();
+    $wrapper.html(tplFun({data: data}));
+
+    $wrapper.on('change', 'select', function () {
+        var $target = $(this);
+        var $parent = $target.closest('td');
+        var val = $target.val().trim();
+
+        switch (val) {
+            case 'Object':
+            case 'List':
+                $parent.next().remove().end().after(tplExtend);
+                break;
+            default:
+                $parent.next().remove();
+        }
+    });
+
+    $wrapper.on('click', '.add', function () {
+        $(this).closest('tr').after(tplSingle);
+    });
+
+    $wrapper.on('click', '.delete', function () {
+        $(this).closest('tr').remove();
+    });
+
+    $wrapper.on('click', '.save', function () {
+        var loop = function () {
+
+        }
+        loop($wrapper.children('tr'));
+    });
+    </script>
+</body>
+
+</html>
