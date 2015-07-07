@@ -1,0 +1,7 @@
+- each service in services
+    tr
+        td= service.name
+        td= service.url
+        td
+            a.btn.btn-sm.btn-default(href='#') Edit
+            a.btn.btn-sm.btn-danger(href='/service/delete/' + service._id) Delete
