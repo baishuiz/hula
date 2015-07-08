@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var contractRouter = require('./routes/contract');
 var serviceRouter = require('./routes/service');
 var restServiceRouter = require('./routes/restapi/service');
+var restContractRouter = require('./routes/restapi/contract');
 var restCaseRouter = require('./routes/restapi/case');
 
 var app = express();
@@ -29,6 +30,7 @@ app.use('/', routes);
 app.use('/service', serviceRouter);
 app.use('/contract', contractRouter);
 app.use('/restapi/service', restServiceRouter);
+app.use('/restapi/contract', restContractRouter);
 app.use('/restapi/case', restCaseRouter)
 
 // catch 404 and forward to error handler

@@ -119,32 +119,61 @@ Case
     res
 ```
 
-## Contract Format (req, res)
+## Contract Format for Mongo
 ```javascript
-// Type
-// Number, String, Object, List, Array, Boolean
+// Metadata: Number, String, Object, List, Array, Boolean
+{
+    a: {
+        _info:{
+            "metadata": "Object",
+            "remark": "啊啊啊啊"
+        }
+        b: {
+            _info: {
+                "metadata": "Number",
+                "remark": "啊啊啊啊"
+            }
+        }
+        c: {
+            _info: {
+                "metadata": "Object",
+                "remark": "啦啦啦"
+            }
+            d: {
+                _info: {
+                    "metadata": "String",
+                    "remark": "啊啊啊"
+                }
+            }
+        }
+    }
+}
+```
+## Contract Format for Front
+```javascript
+// Metadata: Number, String, Object, List, Array, Boolean
 [{
     "key": "datatp",
-    "name": "类型",
-    "type": "string",
+    "remark": "类型",
+    "metadata": "",
     "value": null
 }, {
     "key": "promts",
-    "name": "促销",
-    "type": "array-list",
+    "remark": "促销",
+    "metadata": "",
     "value": [{
         "key": "type",
-        "name": "类型",
-        "type": "number",
+        "remark": "类型",
+        "metadata": "",
         "value": null
     }, {
         "key": "addinfo",
-        "name": "附加信息",
-        "type": "object",
+        "remark": "附加信息",
+        "metadata": "",
         "value": [{
             "key": "id",
-            "name": "编号",
-            "type": "string",
+            "remark": "编号",
+            "metadata": "",
             "value": null
         }]
     }]
