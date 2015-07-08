@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var caseModel = require('../modules/case');
-var resHandler = require('../libs/resHandler');
+var caseModel = require('../../modules/case');
+var resHandler = require('../../libs/resHandler');
 
 router.get('/', function(req, res, next) {
     var srv_id = req.query.srv_id;

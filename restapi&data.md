@@ -11,8 +11,8 @@ Service
                 _id
                 name
                 url
-                req_contract
-                res_contract
+                req
+                res
     get (/restapi/service/:_id)
         req
             _id
@@ -21,14 +21,14 @@ Service
             service
                 name
                 url
-                req_contract
-                res_contract
+                req
+                res
     post (/restapi/service/)
         req
             name
             url
-            req_contract
-            res_contract
+            req
+            res
         res
             ack
             _id
@@ -37,8 +37,8 @@ Service
             _id
             name
             url
-            req_contract
-            res_contract
+            req
+            res
         res
             ack
     delete (/restapi/service/)
@@ -61,8 +61,8 @@ Case
             cases
                 _id
                 name
-                req_json
-                res_json
+                req
+                res
     get (/restapi/case/:_id)
         req
             _id
@@ -71,14 +71,14 @@ Case
             case
                 srv_id
                 name
-                req_json
-                res_json
+                req
+                res
     post (/restapi/case/)
         req
             srv_id
             name
-            req_json
-            res_json
+            req
+            res
         res
             ack
             _id
@@ -86,8 +86,8 @@ Case
         req
             _id
             name
-            req_json
-            res_json
+            req
+            res
         res
             ack
     delete (/restapi/case/)
@@ -109,17 +109,17 @@ Service
     _id
     name
     url
-    req_contract
-    res_contract
+    req
+    res
 Case
     _id
     srv_id
     name
-    req_contract
-    res_contract
+    req
+    res
 ```
 
-## Contract Format (req_contract, res_contract)
+## Contract Format (req, res)
 ```javascript
 // Type
 // Number, String, Object, List, Array, Boolean
