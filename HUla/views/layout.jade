@@ -20,8 +20,10 @@ html
                 ul.nav.navbar-nav.navbar-left
                     li(class=nav === 'service' ? 'active' : '')
                         a(href='/service') 服务
-                    li(class=nav === 'contract' ? 'active' : '')
-                        a(href='/contract') 契约
+                    //
+                        本期不单独设立契约首页，通过服务点击进去
+                        li(class=nav === 'contract' ? 'active' : '')
+                            a(href='/contract') 契约
                     li(class=nav === 'case' ? 'active' : '')
                         a(href='/case') 用例
                     li

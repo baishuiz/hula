@@ -1,15 +1,33 @@
 extends layout
 
 block content
-    h1.page-title= title
-    .panel.panel-default
-
-        table.table.table-striped.js-service-table
-            thead
-                tr(data-id="")
-
-                    th Name
-                    th URL
-                    th Action
-            tbody
-                include ./parts/service-list.jade
+    .service-page
+        h1.page-header
+            = title
+            span.btn-group
+                a.btn.btn-sm.btn-success.js-add-service(href='#') 添加
+            
+        .panel.panel-default
+            table.table.table-striped.service-table.js-service-table
+                thead
+                    tr(data-id="")
+                        th Name
+                        th URL
+                        th NO.
+                        th Action
+                tbody
+                    include ./parts/service-list.jade
+            script.js-service-empty-item(type='text/template')
+                tr(data-id='')
+                    td
+                        input.form-control.js-input-name(type='text', data-value='')
+                    td
+                        input.form-control.js-input-url(type='text', data-value='')
+                    td
+                        input.form-control.js-input-no(type='text', data-value='')
+                    td.action-group
+                        a.btn.btn-sm.btn-default.js-edit(href='#', style='display: none') 编辑
+                        a.btn.btn-sm.btn-success.js-save(href='#') 确认
+                        a.btn.btn-sm.btn-default.js-cancel(href='#') 取消
+                        a.btn.btn-sm.btn-default.js-contract(href='#', style='display: none') 契约
+                        a.btn.btn-sm.btn-danger.js-delete(href='#', style='display: none') 删除
