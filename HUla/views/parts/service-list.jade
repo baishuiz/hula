@@ -1,7 +1,11 @@
 - each service in services
-    tr
-        td= service.name
-        td= service.url
+    tr(data-id=(service._id && service._id.toString()))
         td
-            a.btn.btn-sm.btn-default(href='#') Edit
-            a.btn.btn-sm.btn-danger(href='/service/delete/' + service._id) Delete
+            input.form-control.js-input-name(type='text', value=service.name, disabled='disabled', data-value=service.name)
+        td
+            input.form-control.js-input-url(type='text', value=service.url, disabled='disabled', data-value=service.url)
+        td
+            a.btn.btn-sm.btn-default.js-edit(href='#') Edit
+            a.btn.btn-sm.btn-success.js-save(href='#', style='display: none') Save
+            a.btn.btn-sm.btn-default.js-cancel(href='#', style='display: none') Cancel
+            a.btn.btn-sm.btn-danger.js-delete(href='/service/delete/' + service._id) Delete

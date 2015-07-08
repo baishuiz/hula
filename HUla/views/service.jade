@@ -1,9 +1,10 @@
 extends layout
 
 block content
-    h1.page-header= title
-    .table-responsive
-        table.table.table-striped
+    h1.page-title= title
+    .panel.panel-default
+
+        table.table.table-striped.js-service-table
             thead
                 tr(data-id="")
 
