@@ -5,9 +5,7 @@ var db = dbLibs.db;
 var serviceSchema = new mongoose.Schema({
     NO: {type: String},
     name: {type: String},
-    url: {type: String},
-    req: {type: Array},
-    res: {type: Array}
+    url: {type: String}
 });
 
 var serviceModel = mongoose.model('Service', serviceSchema);

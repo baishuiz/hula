@@ -35,7 +35,7 @@ var findById = function (_id, projection, callback) {
 var create = function (doc, callback) {
     doc = doc || {};
 
-    contractModel.create({ srv_id: doc.doc, NO: doc.NO, req: doc.req, res: doc.res }, function (error, service) {
+    contractModel.create({ srv_id: doc.srv_id, NO: doc.NO, req: doc.req, res: doc.res }, function (error, service) {
         callback && callback(error, service && service._id);
     });
 }
