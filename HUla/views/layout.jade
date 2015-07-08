@@ -27,9 +27,14 @@ html
                     li
                         a(href='#') Help
 
+
     .container-fluid(role="main")
         .main
+            include ./parts/toast.jade
             block content
+
+    include ./parts/loading.jade
+
 
     script(src='/assets/js/jquery-2.1.4.min.js')
     script(src='/assets/js/bootstrap-3.3.5.min.js')
