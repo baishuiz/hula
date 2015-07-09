@@ -1,15 +1,15 @@
 var xlsx       = require('node-xlsx');
 var fs         = require('fs');
-//var toContract = require('./tocontract');
+var toContract = require('./tocontract');
 
 
-//module.exports = function(filePath, callBack ) {
+module.exports = function(filePath, callBack ) {
     var xls  = parseExcel();
     //console.log(xls);
-    fs.writeFile("tttttttttt",JSON.stringify(xls))
-    //var json = toContract(xls);
-    // save contract
-//}
+    //fs.writeFile("tttttttttt",JSON.stringify(xls))
+    var json = toContract(xls);
+
+}
 
 
 
@@ -18,7 +18,3 @@ function parseExcel(filePath){
     var xlsObject = xlsx.parse(filename);
     return xlsObject;
 }
-
-
-// save 契约
-// TODO: @xmf
