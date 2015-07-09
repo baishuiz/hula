@@ -4,6 +4,7 @@ var db = dbLibs.db;
 
 var contractSchema = new mongoose.Schema({
     srv_id: {type: String},
+    version: {type: String},
     NO: {type: String},
     req: {type: Object},
     res: {type: Object}
