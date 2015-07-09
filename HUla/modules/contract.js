@@ -48,6 +48,8 @@ var findOneAndUpdate = function (query, doc, options, callback) {
         return;
     }
 
+    console.log(doc);
+
     contractModel.findOneAndUpdate(query, doc, options, function (error, service) {
         callback && callback(error, service);
     });

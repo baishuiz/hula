@@ -1,13 +1,12 @@
 extends layout
 
 block content
-    .contract-page(data-id=id)
+    .contract-page(data-id=id, data-srv-id=srv_id, data-no=NO)
         h1.page-header
             = title
             span.btn-group
                 a.btn.btn-sm.btn-default(href='/service') 返回
                 a.btn.btn-sm.btn-success.js-save-contract(href='#') 保存
-        =contract
         
         -   var loop = function (ary) {
         -       if (!ary || !ary.length) {
@@ -45,13 +44,13 @@ block content
         h2.sub-header Request
         .contract-table-wrapper
             ul.contract-list.js-req
-                != loop(contract.req)
+                != loop(req)
             
                 
         h2.sub-header Response
         .contract-table-wrapper
             ul.contract-list.js-res
-                != loop(contract.res)
+                != loop(res)
                 
     script#tpl_single(type='text/template')
         li
