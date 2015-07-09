@@ -4,10 +4,10 @@ block content
     .contract-page
         h1.page-header= title
             span.btn-group
-                a.btn.btn-sm.btn-default(href='/service') 返回
+                a.btn.btn-sm.btn-default(href='/service', rel='noreferrer') 返回
                 a.btn.btn-sm.btn-success(href='/contract/new' + '?srv_id=' + (srv_id || '') + '&no=' + (NO || '')) 新增
         - if (showSubTitle)
-            h2.sub-header
+            h3.sub-header
                 | 服务： #{NO}
         
         .panel.panel-default
@@ -27,7 +27,7 @@ block content
                             td.action-group
                                 a.btn.btn-sm.btn-default(href='/contract/' + contract._id + '?srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 编辑
                                 a.btn.btn-sm.btn-danger(href='/contract/delete/' + contract._id) 删除
-                                a.btn.btn-sm.btn-default(href='/case/?con_id' + contract._id) 用例
+                                a.btn.btn-sm.btn-default(href='/case/?con_id=' + contract._id + '&srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 用例
                     - else
                         tr.js-empty
                             td.align-center(colspan=3) 暂无契约

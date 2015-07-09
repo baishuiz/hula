@@ -2,6 +2,8 @@ var dbLibs = require('../db/connection');
 var mongoose = dbLibs.mongoose;
 var db = dbLibs.db;
 
+// TODO Contract 里是否应该存储服务NO？
+
 var contractSchema = new mongoose.Schema({
     srv_id: {type: String},
     version: {type: String},
@@ -23,6 +25,7 @@ var find = function (criteria, projection, callback) {
 }
 
 var findById = function (_id, projection, callback) {
+console.log(_id);
     if (!isValidId(_id)) {
         callback && callback(null, null);
         return;
@@ -48,8 +51,6 @@ var findOneAndUpdate = function (query, doc, options, callback) {
         callback && callback({ stack: 'unavailable id' });
         return;
     }
-
-    console.log(doc);
 
     contractModel.findOneAndUpdate(query, doc, options, function (error, service) {
         callback && callback(error, service);

@@ -1,0 +1,33 @@
+extends layout
+
+block content
+    .contract-page
+        h1.page-header= title
+            span.btn-group
+                a.btn.btn-sm.btn-default(href=referer, rel='noreferrer') 返回
+                a.btn.btn-sm.btn-success(href='/case/new' + '?con_id=' + con_id + '&srv_id=' + (srv_id || '') + '&no=' + (NO || '')) 新增
+        - if (showSubTitle)
+            h3.sub-header
+                | 服务： #{NO}
+        
+        .panel.panel-default
+            table.table.table-striped
+                thead
+                    tr(data-id="")
+                        th Service NO.
+                        th Name
+                        th Action
+                tbody
+                    - each caseObj in cases
+                        - var tmp_srv_id = srv_id || caseObj._srv_id || ''
+                        - var tmp_NO = NO || caseObj.NO || ''
+                        tr(data-id=(caseObj._id && caseObj._id.toString()))
+                            td= NO
+                            td= caseObj.name
+                            td.action-group
+                                a.btn.btn-sm.btn-default(href='/case/' + caseObj._id + '?con_id=' + con_id + '&srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 编辑
+                                a.btn.btn-sm.btn-danger(href='/case/delete/' + caseObj._id) 删除
+                                a.btn.btn-sm.btn-success(href='#') 执行
+                    - else
+                        tr.js-empty
+                            td.align-center(colspan=3) 暂无用例
