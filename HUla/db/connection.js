@@ -1,5 +1,12 @@
 var mongoose = require('mongoose');
-var dbConfig = require('dbconfig.js')
+var dbConfig = require('./config.json');
+mongoose.connect(dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.db);
 
-var uri      = dbConfig.host + dbConfig.db + 
-mongoose.connect(dbConfig.host, dbConfig.db, dbConfig.port);
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+
+module.exports = {
+    mongoose: mongoose,
+    db: db
+};
