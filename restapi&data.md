@@ -11,8 +11,7 @@ Service
                 _id
                 name
                 url
-                req
-                res
+                NO
     get (/restapi/service/:_id)
         req
             _id
@@ -21,24 +20,20 @@ Service
             service
                 name
                 url
-                req
-                res
+                NO
     post (/restapi/service/)
         req
             name
             url
-            req
-            res
+            NO
         res
             ack
             _id
     put (/restapi/service/:_id)
         req
-            _id
             name
             url
-            req
-            res
+            NO
         res
             ack
     delete (/restapi/service/)
@@ -51,10 +46,63 @@ Service
             _id
         res
             ack
+
+Contract
+    get (/restapi/contract/)
+        req
+
+        res
+            ack
+            count
+            services
+                _id
+                srv_id
+                NO
+                req
+                res
+    get (/restapi/contract/:_id)
+        req
+            _id
+        res
+            ack
+            service
+                srv_id
+                NO
+                req
+                res
+    post (/restapi/contract/)
+        req
+            srv_id
+            NO
+            req
+            res
+        res
+            ack
+            _id
+    put (/restapi/contract/:_id)
+        req
+            srv_id
+            NO
+            req
+            res
+        res
+            ack
+    delete (/restapi/contract/)
+        req
+            ids
+        res
+            ack
+    delete (/restapi/service/:_id)
+        req
+            _id
+        res
+            ack
+
+
 Case
     get (/restapi/case/)
         req
-            srv_id
+            con_id
         res
             ack
             cont
@@ -69,13 +117,13 @@ Case
         res
             ack
             case
-                srv_id
+                con_id
                 name
                 req
                 res
     post (/restapi/case/)
         req
-            srv_id
+            con_id
             name
             req
             res
@@ -84,7 +132,6 @@ Case
             _id
     put (/restapi/case/:_id)
         req
-            _id
             name
             req
             res
@@ -109,17 +156,22 @@ Service
     _id
     name
     url
+    NO
+Contract
+    _id
+    srv_id
+    NO
     req
     res
 Case
     _id
-    srv_id
+    con_id
     name
     req
     res
 ```
 
-## Contract Format for Mongo
+## Contract Format for DB
 ```javascript
 // Metadata: Number, String, Object, List, Array, Boolean
 {
@@ -127,18 +179,18 @@ Case
         _info:{
             "metadata": "Object",
             "remark": "啊啊啊啊"
-        }
+        },
         b: {
             _info: {
                 "metadata": "Number",
                 "remark": "啊啊啊啊"
             }
-        }
+        },
         c: {
             _info: {
                 "metadata": "Object",
                 "remark": "啦啦啦"
-            }
+            },
             d: {
                 _info: {
                     "metadata": "String",

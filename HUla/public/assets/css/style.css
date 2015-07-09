@@ -11,7 +11,6 @@ body {
 /*
  * Global add-ons
  */
-
 .sub-header {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
@@ -21,6 +20,9 @@ body {
 }
 .page-header .btn-group .btn {
     margin-left: 5px;
+}
+.align-center {
+    text-align: center;
 }
 
 /*
@@ -113,6 +115,6 @@ body {
 .contract-table td {
     padding: 5px;
 }
-.contract-list>li:nth-child(1) .btn-delete {
+.contract-list>li:nth-child(1)>.input-wrap .btn-delete {
     display: none;
 }

@@ -1,5 +1,13 @@
 
 (function () {
+    /*
+    * Utility
+    */
+    var Util = {};
+
+    /*
+    * UI
+    */
     var UI = (function () {
         var $loading = $('#js-mask');
         var $toast = $('#js-toast');
@@ -117,11 +125,17 @@
     var serviceAction = function () {
         var $servicePage = $('.service-page');
         var $serviceTable = $servicePage.find('.js-service-table');
+        var $emptyElm = $serviceTable.find('.js-empty')
 
         $servicePage.on('click', '.js-add-service', function (e) {
             e.preventDefault();
-            var $emptyItem = $servicePage.find('.js-service-empty-item');
-            $serviceTable.append($($emptyItem.html()));
+
+            if (!$serviceTable.find('>tbody>tr').not($emptyElm).length) {
+                $emptyElm.hide();
+            }
+
+            var $tplItem = $servicePage.find('.js-service-tpl-item');
+            $serviceTable.append($($tplItem.html()));
         });
 
         // 编辑
@@ -143,13 +157,13 @@
             var $root = $target.closest('tr');
             var id = $root.attr('data-id');
             var ajaxStr = id ? 'put' : 'post';
+            var NO = $.trim($root.find('.js-input-no').val());
 
             UI.showLoading();
             Ajax[ajaxStr]('/restapi/service/' + id, {
-                name: $root.find('.js-input-name').val(),
-                url: $root.find('.js-input-url').val(),
-                NO: $root.find('.js-input-no').val(),
-                url: $root.find('.js-input-url').val()
+                name: $.trim($root.find('.js-input-name').val()),
+                url: $.trim($root.find('.js-input-url').val()),
+                NO: NO
             }, function (data) {
                 UI.hideLoading();
                 $target.hide();
@@ -160,7 +174,7 @@
                 if (data._id) {
                     var id = data._id.toString();
                     $root.attr('data-id', id);
-                    $root.find('.js-contract').attr('href', '/contract/' + id);
+                    $root.find('.js-contract').attr('href', '/contract/?srv_id=' + id + '&no=' + NO);
                     $root.find('.js-delete').attr('href', '/service/delete/' + id);
                 }
 
@@ -178,6 +192,10 @@
             var $target = $(this);
             var $root = $target.closest('tr');
             var id = $root.attr('data-id');
+
+            if ($serviceTable.find('>tbody>tr').not($emptyElm).length < 2) {
+                $emptyElm.show();
+            }
 
             if (!id) {
                 $root.remove();
@@ -201,7 +219,7 @@
         $contractPage.on('change', 'select', function () {
             var $target = $(this);
             var $parent = $target.closest('.input-wrap');
-            var val = $target.val().trim();
+            var val = $.trim($target.val());
 
             switch (val) {
                 case 'Object':
@@ -234,8 +252,8 @@
                 }
 
                 var key = $.trim($inputWrap.find('.js-key').val());
-                var name = $.trim($inputWrap.find('.js-name').val());
-                var type = $.trim($inputWrap.find('.js-type').val());
+                var remark = $.trim($inputWrap.find('.js-remark').val());
+                var metadata = $.trim($inputWrap.find('.js-metadata').val());
 
                 if (!key) {
                     return;
@@ -243,8 +261,8 @@
 
                 list.push({
                     key: key,
-                    name: name,
-                    type: type,
+                    remark: remark,
+                    metadata: metadata,
                     value: subListValue
                 });
             });
@@ -255,9 +273,14 @@
             var reqData = loopList($('.contract-list.js-req>li'));
             var resData = loopList($('.contract-list.js-res>li'));
             var id = $contractPage.attr('data-id');
+            var srv_id = $contractPage.attr('data-srv-id');
+            var NO = $contractPage.attr('data-no');
+            var ajaxStr = id ? 'put' : 'post';
 
             UI.showLoading();
-            Ajax.put('/restapi/service/' + id, {
+            Ajax[ajaxStr]('/restapi/contract/' + (id || ''), {
+                srv_id: srv_id,
+                NO: NO,
                 req: reqData,
                 res: resData
             }, function (data) {
