@@ -113,3 +113,22 @@ body {
     width: 100px;
     margin-left: 10px;
 }
+.contract-list .input-wrap {
+    margin-bottom: 10px;
+}
+.contract-list .input-wrap select {
+    margin-left: 10px;
+}
+.contract-list .input-wrap .btn {
+    display: none;
+    margin-left: 10px;
+}
+.contract-list .input-wrap:hover .btn {
+    display: inline-block;
+}
+.contract-list>li:nth-child(1)>.input-wrap .btn {
+    display: inline-block;
+}
+.contract-list>li:nth-child(1)>.input-wrap .btn-delete {
+    display: none;
+}
