@@ -148,7 +148,8 @@
             Ajax[ajaxStr]('/restapi/service/' + id, {
                 name: $root.find('.js-input-name').val(),
                 url: $root.find('.js-input-url').val(),
-                NO: $root.find('.js-input-no').val()
+                NO: $root.find('.js-input-no').val(),
+                url: $root.find('.js-input-url').val()
             }, function (data) {
                 UI.hideLoading();
                 $target.hide();
@@ -159,7 +160,7 @@
                 if (data._id) {
                     var id = data._id.toString();
                     $root.attr('data-id', id);
-                    $root.find('.js-contract').attr('href', '/contract/?srv_id=' + id);
+                    $root.find('.js-contract').attr('href', '/contract/' + id);
                     $root.find('.js-delete').attr('href', '/service/delete/' + id);
                 }
 
@@ -233,8 +234,8 @@
                 }
 
                 var key = $.trim($inputWrap.find('.js-key').val());
-                var remark = $.trim($inputWrap.find('.js-remark').val());
-                var metadata = $.trim($inputWrap.find('.js-metadata').val());
+                var name = $.trim($inputWrap.find('.js-name').val());
+                var type = $.trim($inputWrap.find('.js-type').val());
 
                 if (!key) {
                     return;
@@ -242,8 +243,8 @@
 
                 list.push({
                     key: key,
-                    remark: remark,
-                    metadata: metadata,
+                    name: name,
+                    type: type,
                     value: subListValue
                 });
             });
