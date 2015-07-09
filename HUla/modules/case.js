@@ -3,7 +3,7 @@ var mongoose = dbLibs.mongoose;
 var db = dbLibs.db;
 
 var caseSchema = new mongoose.Schema({
-    srv_id: {type: String},
+    con_id: {type: String},
     name: {type: String},
     req: {type: Array},
     res: {type: Array}
@@ -17,18 +17,18 @@ var isValidId = function (_id) {
 
 var find = function (criteria, projection, callback) {
     criteria = criteria || {};
-    var srv_id = criteria && criteria.srv_id;
+    var con_id = criteria && criteria.con_id;
 
-    if (srv_id) {
-        if (!isValidId(srv_id)) {
+    if (con_id) {
+        if (!isValidId(con_id)) {
             callback && callback({ stack: 'unavailable id' });
             return;
         }
     } else {
-        delete criteria.srv_id;
+        delete criteria.con_id;
     }
 
-    caseModel.find(criteria, projection || {srv_id:1, name: 1, req: 1, res: 1}, {}, function(error, result){
+    caseModel.find(criteria, projection || {con_id:1, name: 1, req: 1, res: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
@@ -39,30 +39,30 @@ var findById = function (_id, projection, callback) {
         return;
     }
 
-    caseModel.findById(_id, projection || {srv_id: 1, name: 1, req: 1, res: 1}, {}, function(error, result){
+    caseModel.findById(_id, projection || {con_id: 1, name: 1, req: 1, res: 1}, {}, function(error, result){
         callback && callback(error, result);
     });
 }
 
 var create = function (doc, callback) {
     doc = doc || {};
-    var srv_id = doc.srv_id;
+    var con_id = doc.con_id;
     var name = doc.name;
     var req = doc.req;
     var res = doc.res;
-    if (!name || !req || !res || !isValidId(srv_id)) {
+    if (!name || !req || !res || !isValidId(con_id)) {
         callback && callback({ stack: 'unavailable param' });
         return;
     }
 
-    find({ name: name, srv_id: srv_id }, null, function (error, result) {
+    find({ name: name, con_id: con_id }, null, function (error, result) {
         if (error) {
                 callback && callback(error, null);
         } else {
             if (result && result.length) {
                 callback && callback({ stack: 'case name exist' }, null);
             } else {
-                caseModel.create({ srv_id: srv_id, name: name, req: req, res: res }, function (error, caseObj) {
+                caseModel.create({ con_id: con_id, name: name, req: req, res: res }, function (error, caseObj) {
                     callback && callback(error, caseObj && caseObj._id);
                 });
             }
