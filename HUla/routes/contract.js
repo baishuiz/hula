@@ -4,16 +4,19 @@ var serviceModel = require('../modules/service');
 var contractModel = require('../modules/contract');
 var contractFormat = require('../libs/contractFormat');
 
+// TODO 后续契约主页面可以单独访问，并根据select新建契约
+
 router.get('/', function(req, res, next) {
     var findContract = function (service) {
         service = service || {};
         var reqObj = req.query.srv_id ? { srv_id: req.query.srv_id } : {};
+
         contractModel.find(reqObj, null, function (error, result) {
             res.render('contract', {
                 title: '契约',
                 service: service,
                 contracts: result || {},
-                nav: 'contract',
+                nav: 'service',
                 errorMsg: error && error.msg,
                 showSubTitle: !!req.query.srv_id,
                 srv_id: service._id,
@@ -21,6 +24,7 @@ router.get('/', function(req, res, next) {
             });
         });
     }
+    
     if (req.query.srv_id) {
         serviceModel.findById(req.query.srv_id, null, function (error, service) {
             if (error) {
@@ -28,7 +32,7 @@ router.get('/', function(req, res, next) {
                     title: '契约',
                     service: {},
                     contracts: result || {},
-                    nav: 'contract',
+                    nav: 'service',
                     errorMsg: error && error.msg,
                 });
             } else {
@@ -37,7 +41,7 @@ router.get('/', function(req, res, next) {
             }
         });
     } else {
-        findContract();
+        res.redirect('/service');
     }
 });
 
@@ -47,10 +51,10 @@ router.get('/new', function(req, res, next) {
         contract: {},
         req: [],
         res: [],
-        nav: 'contract',
+        nav: 'service',
         id: '',
-        srv_id: req.query.srv_id,
-        NO: req.query.no
+        srv_id: req.query.srv_id || '',
+        NO: req.query.no || ''
     });
 });
 
@@ -62,7 +66,7 @@ router.get('/:_id', function(req, res, next) {
             contract: result || {},
             req: contractFormat(result.req),
             res: contractFormat(result.res),
-            nav: 'contract',
+            nav: 'service',
             errorMsg: error && error.msg,
             id: result && result._id && result._id.toString(),
             srv_id: req.query.srv_id,

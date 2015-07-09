@@ -1,15 +1,14 @@
 extends layout
 
 block content
-    .contract-page(data-id=id, data-srv-id=srv_id, data-no=NO)
+    .contract-page
         h1.page-header= title
             span.btn-group
                 a.btn.btn-sm.btn-default(href='/service') 返回
-                a.btn.btn-sm.btn-success(href='/contract/new' + '?srv_id=' + srv_id + '&no=' + NO) 新增
+                a.btn.btn-sm.btn-success(href='/contract/new' + '?srv_id=' + (srv_id || '') + '&no=' + (NO || '')) 新增
         - if (showSubTitle)
             h2.sub-header
-                服务：
-                = service.name
+                | 服务： #{NO}
         
         .panel.panel-default
             table.table.table-striped
@@ -20,12 +19,15 @@ block content
                         th Action
                 tbody
                     - each contract in contracts
+                        - var tmp_srv_id = srv_id || contract._srv_id || ''
+                        - var tmp_NO = NO || contract.NO || ''
                         tr(data-id=(contract._id && contract._id.toString()))
-                            td= service.NO || contract.NO
+                            td= NO
                             td= contract.version || '暂无版本'
                             td.action-group
-                                a.btn.btn-sm.btn-default.js-edit(href='/contract/' + contract._id + '?srv_id=' + srv_id + '&no=' + NO) 编辑
-                                a.btn.btn-sm.btn-danger.js-delete(href='/contract/delete/' + contract._id) 删除
+                                a.btn.btn-sm.btn-default(href='/contract/' + contract._id + '?srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 编辑
+                                a.btn.btn-sm.btn-danger(href='/contract/delete/' + contract._id) 删除
+                                a.btn.btn-sm.btn-default(href='/case/?con_id' + contract._id) 用例
                     - else
                         tr.js-empty
-                            td.align-center(colspan=2) 暂无契约
+                            td.align-center(colspan=3) 暂无契约

@@ -32,7 +32,6 @@ router.put('/:_id', function(req, res, next) {
 });
 
 router.delete('/', function(req, res, next) {
-    console.log(req.body.ids, 'routes');
     caseModel.removeAll(req.body.ids, null, function (error, result) {
         res.json(resHandler(null, error));
     });
