@@ -2,83 +2,30 @@ extends layout
 
 block content
     .contract-page(data-id=id, data-srv-id=srv_id, data-no=NO)
-        h1.page-header
-            = title
+        h1.page-header= title
             span.btn-group
                 a.btn.btn-sm.btn-default(href='/service') 返回
-                a.btn.btn-sm.btn-success.js-save-contract(href='#') 保存
+                a.btn.btn-sm.btn-success(href='/contract/new' + '?srv_id=' + srv_id + '&no=' + NO) 新增
+        - if (showSubTitle)
+            h2.sub-header
+                服务：
+                = service.name
         
-        -   var loop = function (ary) {
-        -       if (!ary || !ary.length) {
-        -           ary = [{}]
-        -       }
-        -       var str = [];
-        -       for (var i = 0, len = ary.length, v, isFirst; i < len; i++) {
-        -           v = ary[i];
-        -           isFirst = i === 0;
-        -           str.push('<li>');
-        -                   str.push('<div class="input-wrap">')
-        -                       str.push('<input type="text" placeholder="key" class="js-key" value="' + (v.key || '') +'">');
-        -                       str.push('<input type="text" placeholder="remark" class="js-remark" value="' + (v.remark || '') + '">');
-        -                       str.push('<select class="js-metadata">');
-        -                           str.push('<option value="String" ' + (v.metadata === 'String' ?  'selected' : '') + '>String</option>');
-        -                           str.push('<option value="Number" ' + (v.metadata === 'Number' ?  'selected' : '') + '>Number</option>');
-        -                           str.push('<option value="Boolean" ' + (v.metadata === 'Boolean' ?  'selected' : '') + '>Boolean</option>');
-        -                           str.push('<option value="Array" ' + (v.metadata === 'Array' ?  'selected' : '') + '>Array</option>');
-        -                           str.push('<option value="Object" ' + (v.metadata === 'Object' ?  'selected' : '') + '>Object</option>');
-        -                           str.push('<option value="List" ' + (v.metadata === 'List' ?  'selected' : '') + '>List</option>');
-        -                       str.push('</select>');
-        -                       str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete</button>');
-        -                       str.push('<button class="js-add btn btn-xs btn-success">add</button>');
-        -                   str.push('</div>');
-        -                   if (v.metadata === 'Object' || v.metadata === 'List') {
-        -                       str.push('<ul>');
-        -                               str.push(loop(v.value));
-        -                       str.push('</ul>');
-        -                   }
-        -           str.push('</li>')
-        -       }
-        -       return str.join('');
-        -   }
-        
-        h2.sub-header Request
-        .contract-table-wrapper
-            ul.contract-list.js-req
-                != loop(req)
-            
-                
-        h2.sub-header Response
-        .contract-table-wrapper
-            ul.contract-list.js-res
-                != loop(res)
-                
-    script#tpl_single(type='text/template')
-        li
-            .input-wrap
-                input.js-key(type='text', placeholder='key')
-                input.js-remark(type='text', placeholder='remark')
-                select.js-metadata
-                  option(value='String') String
-                  option(value='Number') Number
-                  option(value='Boolean') Boolean
-                  option(value='Array') Array
-                  option(value='Object') Object
-                  option(value='List') List
-                button.btn.btn-xs.btn-danger.btn-delete.js-delete delete
-                button.btn.btn-xs.btn-success.js-add add
-            
-    script#tpl_extend(type='text/template')
-        ul
-            li
-                .input-wrap
-                    input.js-key(type='text', placeholder='key')
-                    input.js-remark(type='text', placeholder='remark')
-                    select.js-metadata
-                        option(value='String') String
-                        option(value='Number') Number
-                        option(value='Boolean') Boolean
-                        option(value='Array') Array
-                        option(value='Object') Object
-                        option(value='List') List
-                    button.btn.btn-xs.btn-delete.btn-danger.js-delete delete
-                    button.btn.btn-xs.btn-success.js-add add
+        .panel.panel-default
+            table.table.table-striped
+                thead
+                    tr(data-id="")
+                        th Service NO.
+                        th Version
+                        th Action
+                tbody
+                    - each contract in contracts
+                        tr(data-id=(contract._id && contract._id.toString()))
+                            td= service.NO || contract.NO
+                            td= contract.version || '暂无版本'
+                            td.action-group
+                                a.btn.btn-sm.btn-default.js-edit(href='/contract/' + contract._id + '?srv_id=' + srv_id + '&no=' + NO) 编辑
+                                a.btn.btn-sm.btn-danger.js-delete(href='/contract/delete/' + contract._id) 删除
+                    - else
+                        tr.js-empty
+                            td.align-center(colspan=2) 暂无契约

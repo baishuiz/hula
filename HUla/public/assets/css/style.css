@@ -24,6 +24,9 @@ body {
 .align-center {
     text-align: center;
 }
+.table .action-group a {
+    margin-left: 10px;
+}
 
 /*
  * Top navigation
@@ -97,9 +100,6 @@ body {
 /*
 * Service Page
 */
-.service-page .action-group a {
-    margin-left: 10px;
-}
 
 /*
  * Contract Page
@@ -108,13 +108,8 @@ body {
     width: 100%;
     overflow: auto;
 }
-.contract-table input {
-    width: 50px;
-    margin-right: 5px;
-}
-.contract-table td {
-    padding: 5px;
-}
-.contract-list>li:nth-child(1)>.input-wrap .btn-delete {
-    display: none;
+.contract-table-wrapper .form-control {
+    display: inline-block;
+    width: 100px;
+    margin-left: 10px;
 }

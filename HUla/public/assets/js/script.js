@@ -285,7 +285,9 @@
                 res: resData
             }, function (data) {
                 UI.hideLoading();
-
+                if (!id) {
+                    window.location.href = '/contract/?srv_id=' + srv_id;
+                }
             }, function (error) {
                 UI.hideLoading();
                 error.msg && UI.showError(error.msg);

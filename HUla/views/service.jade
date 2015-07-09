@@ -16,7 +16,24 @@ block content
                         th NO.
                         th Action
                 tbody
-                    include ./parts/service-list.jade
+                    - each service in services
+                        tr(data-id=(service._id && service._id.toString()))
+                            td
+                                input.form-control.js-input-name(type='text', value=service.name, disabled='disabled', data-value=service.name)
+                            td
+                                input.form-control.js-input-url(type='text', value=service.url, disabled='disabled', data-value=service.url)
+                            td
+                                input.form-control.js-input-no(type='text', value=service.NO, disabled='disabled', data-value=service.NO)
+                            td.action-group
+                                a.btn.btn-sm.btn-default.js-edit(href='#') 编辑
+                                a.btn.btn-sm.btn-success.js-save(href='#', style='display: none') 确认
+                                a.btn.btn-sm.btn-default.js-cancel(href='#', style='display: none') 取消
+                                a.btn.btn-sm.btn-default.js-contract(href='/contract/?srv_id=' + service._id) 契约
+                                a.btn.btn-sm.btn-danger.js-delete(href='/service/delete/' + service._id) 删除
+                    - else
+                        tr.js-empty
+                            td.align-center(colspan=4) 暂无服务
+
             script.js-service-tpl-item(type='text/template')
                 tr(data-id='')
                     td
