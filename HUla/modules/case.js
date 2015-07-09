@@ -1,4 +1,4 @@
-var dbLibs = require('../libs/db');
+var dbLibs = require('../db/connection');
 var mongoose = dbLibs.mongoose;
 var db = dbLibs.db;
 
