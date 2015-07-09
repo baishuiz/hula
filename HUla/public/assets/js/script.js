@@ -211,6 +211,9 @@
         });
     };
 
+    /*
+    * Contract Page
+    */
     var contractAction = function () {
         var $contractPage = $('.contract-page');
         var tplSingle = $('#tpl_single').html();
@@ -268,10 +271,11 @@
             });
             return list;
         };
+        // TODO 验证input
         $contractPage.on('click', '.js-save-contract', function (e) {
             e.preventDefault();
-            var reqData = loopList($('.contract-list.js-req>li'));
-            var resData = loopList($('.contract-list.js-res>li'));
+            var reqData = loopList($('.common-list.js-req>li'));
+            var resData = loopList($('.common-list.js-res>li'));
             var id = $contractPage.attr('data-id');
             var srv_id = $contractPage.attr('data-srv-id');
             var NO = $contractPage.attr('data-no');
@@ -296,9 +300,79 @@
         });
     }
 
+    /*
+    * Case Page
+    */
+    var caseAction = function () {
+        var $casePage = $('.case-page');
+
+        $casePage.on('click', '.js-add', function (e) {
+            var $curSubTree = $(this).closest('.list-tree');
+            var $appendTree = $curSubTree.clone();
+            $appendTree.find('.js-input').val('');
+            $curSubTree.after($appendTree);
+        });
+
+        var loopList = function ($els) {
+            var list = [];
+            $els.each(function(){
+                var $el = $(this);
+                var $inputWrap = $el.find('.input-wrap');
+                var subListValue = null;
+
+                var $subList = $el.find('>ul>li');
+                if ($subList.length) {
+                    subListValue = loopList($subList);
+                }
+
+                var key = $.trim($inputWrap.attr('data-key'));
+                var remark = $.trim($inputWrap.attr('data-remark'));
+                var metadata = $.trim($inputWrap.attr('data-metadata'));
+
+                list.push({
+                    key: key,
+                    remark: remark,
+                    metadata: metadata,
+                    value: subListValue
+                });
+            });
+            return list;
+        };
+        // TODO 验证input
+        $casePage.on('click', '.js-save-case', function (e) {
+            e.preventDefault();
+            var reqData = loopList($('.common-list.js-req>li'));
+            var resData = loopList($('.common-list.js-res>li'));
+            var id = $casePage.attr('data-id');
+            var srv_id = $casePage.attr('data-srv-id');
+            var NO = $casePage.attr('data-no');
+            var ajaxStr = id ? 'put' : 'post';
+
+            // TODO 格式化成标准请求数据
+            return;
+            UI.showLoading();
+            Ajax[ajaxStr]('/restapi/contract/' + (id || ''), {
+                srv_id: srv_id,
+                NO: NO,
+                req: reqData,
+                res: resData
+            }, function (data) {
+                UI.hideLoading();
+                if (!id) {
+                    window.location.href = '/contract/?srv_id=' + srv_id;
+                }
+            }, function (error) {
+                UI.hideLoading();
+                error.msg && UI.showError(error.msg);
+            })
+
+        });
+    };
+
     $(document).on('ready', function () {
         serviceAction();
         contractAction();
+        caseAction();
     });
 
 })();

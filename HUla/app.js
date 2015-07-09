@@ -9,6 +9,7 @@ global._ = global._ || require('underscore');
 var routes = require('./routes/index');
 var contractRouter = require('./routes/contract');
 var serviceRouter = require('./routes/service');
+var caseRouter = require('./routes/case');
 var restServiceRouter = require('./routes/restapi/service');
 var restContractRouter = require('./routes/restapi/contract');
 var restCaseRouter = require('./routes/restapi/case');
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/service', serviceRouter);
 app.use('/contract', contractRouter);
+app.use('/case', caseRouter);
 app.use('/restapi/service', restServiceRouter);
 app.use('/restapi/contract', restContractRouter);
 app.use('/restapi/case', restCaseRouter)

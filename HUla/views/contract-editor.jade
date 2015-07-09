@@ -5,7 +5,7 @@ block content
         h1.page-header
             = title
             span.btn-group
-                a.btn.btn-sm.btn-default(href=('/contract?srv_id=' + srv_id)) 返回
+                a.btn.btn-sm.btn-default(href=('/contract?srv_id=' + srv_id), rel='noreferrer') 返回
                 a.btn.btn-sm.btn-success.js-save-contract(href='#') 保存
         
         -   var loop = function (ary) {
@@ -41,15 +41,15 @@ block content
         -       return str.join('');
         -   }
         
-        h2.sub-header Request
+        h3.sub-header Request
         .contract-table-wrapper
-            ul.contract-list.js-req
+            ul.common-list.js-req
                 != loop(req)
             
                 
-        h2.sub-header Response
+        h3.sub-header Response
         .contract-table-wrapper
-            ul.contract-list.js-res
+            ul.common-list.js-res
                 != loop(res)
                 
     script#tpl_single(type='text/template')

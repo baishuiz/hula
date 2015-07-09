@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
             });
         });
     }
-    
+
     if (req.query.srv_id) {
         serviceModel.findById(req.query.srv_id, null, function (error, service) {
             if (error) {
@@ -80,6 +80,7 @@ router.get('/delete/:_id', function(req, res, next) {
         if (error) {
             res.render('error', { title: '错误', message: '错误', nav: 'service', error: error });
         } else {
+            var backUrl = req.header('Referer') || '/contract';
             res.redirect('back');
         }
     });

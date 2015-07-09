@@ -104,31 +104,117 @@ body {
 /*
  * Contract Page
  */
-.contract-table-wrapper {
+.contract-table-wrapper,
+.case-table-wrapper {
     width: 100%;
     overflow: auto;
 }
-.contract-table-wrapper .form-control {
+.common-list .form-control {
     display: inline-block;
     width: 100px;
     margin-left: 10px;
 }
-.contract-list .input-wrap {
+.common-list .input-wrap {
     margin-bottom: 10px;
 }
-.contract-list .input-wrap select {
+.common-list .input-wrap select {
     margin-left: 10px;
 }
-.contract-list .input-wrap .btn {
+.contract-table-wrapper .common-list .input-wrap .btn {
     display: none;
     margin-left: 10px;
 }
-.contract-list .input-wrap:hover .btn {
+.common-list .input-wrap:hover .btn {
     display: inline-block;
 }
-.contract-list>li:nth-child(1)>.input-wrap .btn {
+.common-list>li:nth-child(1)>.input-wrap .btn {
     display: inline-block;
 }
-.contract-list>li:nth-child(1)>.input-wrap .btn-delete {
+.common-list>li:nth-child(1)>.input-wrap .btn-delete {
     display: none;
+}
+
+/*
+ * Case Page
+ */
+.case-table-wrapper .common-list .input-wrap {
+    min-height: 34px;
+}
+.case-table-wrapper .common-list .text {
+    display: inline-block;
+    min-width: 50px;
+    margin-right: 10px;
+    white-space:nowrap;
+}
+.case-table-wrapper .common-list {
+    position: relative;
+}
+.case-table-wrapper ul,
+.case-table-wrapper li {
+    position: relative;
+    list-style: none;
+}
+.case-table-wrapper .common-list ul li::before {
+    content: ' ';
+    position: absolute;
+    top: 17px;
+    left: -35px;
+    width: 32px;
+    height: 1px;
+    background: #000;
+}
+.case-table-wrapper .common-list li::after {
+    content: ' ';
+    position: absolute;
+    top: 25px;
+    left: 5px;
+    width: 1px;
+    height: -webkit-calc(100% - 20px);
+    height: calc(100% - 20px);
+    background: #000;
+}
+.case-table-wrapper .common-list ul>li::after {
+    /*display: none;*/
+}
+.case-table-wrapper .common-list ul {
+    padding-left: 40px;
+}
+.case-table-wrapper .common-list ul.list-tree {
+    padding-left: 80px;
+    overflow: hidden;
+}
+.case-table-wrapper .common-list ul.list-tree::before {
+    content: ' ';
+    position: absolute;
+    top: 17px;
+    left: 45px;
+    width: 1px;
+    height: 100%;
+    background: #000;
+}
+.case-table-wrapper .common-list ul.list-tree::after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 45px;
+    width: 1px;
+    height: 26px;
+    background: #fff;
+}
+.case-table-wrapper .common-list .line {
+
+}
+.case-table-wrapper .common-list .list-tree li::before {
+
+}
+.case-table-wrapper .common-list .list-tree>li:nth-child(1)>.line {
+    position: absolute;
+    width: 40px;
+    height: 1px;
+    background: #000;
+    left: -75px;
+    top: 40px;
+}
+.case-table-wrapper .common-list .list-tree>li>.line {
+
 }
