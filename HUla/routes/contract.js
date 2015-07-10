@@ -64,8 +64,8 @@ router.get('/:_id', function(req, res, next) {
         res.render('contract-editor', {
             title: '编辑契约',
             contract: result || {},
-            req: contractFormat(result.req),
-            res: contractFormat(result.res),
+            req: contractFormat.dbToView(result.req),
+            res: contractFormat.dbToView(result.res),
             nav: 'service',
             errorMsg: error && error.msg,
             id: result && result._id && result._id.toString(),

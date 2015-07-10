@@ -201,6 +201,9 @@ body {
     height: 26px;
     background: #fff;
 }
+.case-table-wrapper .common-list li ul.list-tree:first-child .js-delete {
+    display: none;
+}
 .case-table-wrapper .common-list .line {
 
 }
