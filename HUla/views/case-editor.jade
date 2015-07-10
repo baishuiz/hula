@@ -1,11 +1,11 @@
 extends layout
 
 block content
-    .case-page(data-id=id, data-srv-id=srv_id, data-no=NO)
+    .case-page(data-id=id, data-srv-id=srv_id, data-no=NO, data-con-id=con_id)
         h1.page-header
             = title
             span.btn-group
-                a.btn.btn-sm.btn-default(href=referer, rel='noreferrer') 返回
+                a.btn.btn-sm.btn-default.js-back-btn(href=referer, rel='noreferrer') 返回
                 a.btn.btn-sm.btn-success.js-save-case(href='#') 保存
         
         -   var loop = function (ary, parentIsList) {
@@ -18,7 +18,7 @@ block content
         -           isFirst = i === 0;
         -           str.push('<li>');
         -                   str.push('<div class="line"></div>');
-        -                   str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '">');
+        -                   str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
         -                       str.push('<strong class="text">' + (v.key || '') + '</strong>');
         -                       str.push('<span class="text">' + (v.remark || '') + '</span>');
         -                       str.push('<span class="text">' + (v.metadata || '') + '</span>');

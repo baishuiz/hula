@@ -41,6 +41,7 @@ function loopAry (ary) {
     return returnObj;
 }
 
-module.exports = function (data, revertAry) {
-    return revertAry ? loopAry(data) : loopObj(data);
+module.exports = {
+    dbToView: loopObj,
+    viewToDb: loopAry
 }

@@ -313,6 +313,11 @@
             $curSubTree.after($appendTree);
         });
 
+        $casePage.on('click', '.js-delete', function (e) {
+            var $curSubTree = $(this).closest('.list-tree');
+            $curSubTree.remove();
+        });
+
         var loopList = function ($els) {
             var list = [];
             $els.each(function(){
@@ -320,20 +325,50 @@
                 var $inputWrap = $el.find('.input-wrap');
                 var subListValue = null;
 
-                var $subList = $el.find('>ul>li');
-                if ($subList.length) {
-                    subListValue = loopList($subList);
-                }
-
                 var key = $.trim($inputWrap.attr('data-key'));
                 var remark = $.trim($inputWrap.attr('data-remark'));
                 var metadata = $.trim($inputWrap.attr('data-metadata'));
+                var val = null;
+
+                // Metadata: Number, String, Object, List, Array, Boolean
+                switch (metadata) {
+                    case 'String':
+                        val = $.trim($inputWrap.find('.js-input').val()) || null;
+                        break;
+                    case 'Number':
+                        val = parseInt($.trim($inputWrap.find('.js-input').val()), 10) || null;
+                        break;
+                    case 'Boolean':
+                        val = $.trim($inputWrap.find('.js-boolean').val()) == 1;
+                        break;
+                    case 'Array':
+                        val = $.trim($inputWrap.find('.js-input').val()).split(',') || null;
+                        break;
+                    case 'Object':
+                        var $subList = $el.find('>ul>li');
+                        if ($subList.length) {
+                            subListValue = loopList($subList);
+                        }
+                        break;
+                    case 'List':
+                        var $subLists = $el.find('>.list-tree');
+                        subListValue = [];
+                        if ($subLists.length) {
+                            $subLists.each(function () {
+                                subListValue.push(loopList($(this).find('>li')));
+                            });
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
                 list.push({
                     key: key,
                     remark: remark,
                     metadata: metadata,
-                    value: subListValue
+                    value: subListValue,
+                    val: val
                 });
             });
             return list;
@@ -343,23 +378,23 @@
             e.preventDefault();
             var reqData = loopList($('.common-list.js-req>li'));
             var resData = loopList($('.common-list.js-res>li'));
+            var name = $.trim($casePage.find('.js-name').val());
             var id = $casePage.attr('data-id');
             var srv_id = $casePage.attr('data-srv-id');
+            var con_id = $casePage.attr('data-con-id');
             var NO = $casePage.attr('data-no');
             var ajaxStr = id ? 'put' : 'post';
 
-            // TODO 格式化成标准请求数据
-            return;
             UI.showLoading();
-            Ajax[ajaxStr]('/restapi/contract/' + (id || ''), {
-                srv_id: srv_id,
-                NO: NO,
+            Ajax[ajaxStr]('/restapi/case/' + (id || ''), {
+                con_id: con_id,
+                name: name,
                 req: reqData,
                 res: resData
             }, function (data) {
                 UI.hideLoading();
                 if (!id) {
-                    window.location.href = '/contract/?srv_id=' + srv_id;
+                    window.location.href = $('.js-back-btn').attr('href');
                 }
             }, function (error) {
                 UI.hideLoading();

@@ -3,6 +3,7 @@ var router = express.Router();
 var caseModel = require('../modules/case');
 var contractModel = require('../modules/contract');
 var contractFormat = require('../libs/contractFormat');
+var caseFormat = require('../libs/caseFormat');
 
 // TODO 后续case主页面可以单独访问，并根据select的服务和契约新建case
 
@@ -38,8 +39,8 @@ router.get('/new', function(req, res, next) {
                 res.render('case-editor', {
                     title: '新增用例',
                     contract: {},
-                    req: contractFormat(result.req),
-                    res: contractFormat(result.res),
+                    req: contractFormat.dbToView(result.req),
+                    res: contractFormat.dbToView(result.res),
                     nav: 'service',
                     id: '',
                     con_id: req.query.con_id || '',
@@ -58,8 +59,8 @@ router.get('/:_id', function(req, res, next) {
         res.render('case-editor', {
             title: '编辑用例',
             contract: result || {},
-            req: contractFormat(result.req),
-            res: contractFormat(result.res),
+            req: contractFormat.dbToView(result.req),
+            res: contractFormat.dbToView(result.res),
             nav: 'service',
             errorMsg: error && error.msg,
             id: result && result._id && result._id.toString(),

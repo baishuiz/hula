@@ -9,8 +9,8 @@ router.get('/', function(req, res, next) {
         result = result || [];
         result.forEach(function (obj) {
             if (obj) {
-                obj.req = contractFormat(obj.req);
-                obj.res = contractFormat(obj.res);
+                obj.req = contractFormat.dbToView(obj.req);
+                obj.res = contractFormat.dbToView(obj.res);
             }
         });
         res.json(resHandler({
@@ -23,8 +23,8 @@ router.get('/', function(req, res, next) {
 router.get('/:_id', function(req, res, next) {
     contractModel.findById(req.params._id, null, function(error, result){
         result = result || {};
-        result.req = contractFormat(result.req);
-        result.res = contractFormat(result.res);
+        result.req = contractFormat.dbToView(result.req);
+        result.res = contractFormat.dbToView(result.res);
 
         res.json(resHandler({ contract: result }, error));
     });
@@ -32,8 +32,8 @@ router.get('/:_id', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
     var param = req.body || {};
-    param.req = contractFormat(param.req, true);
-    param.res = contractFormat(param.res, true);
+    param.req = contractFormat.viewToDb(param.req);
+    param.res = contractFormat.viewToDb(param.res);
     contractModel.create(param, function (error, result) {
         res.json(resHandler({ _id: result }, error));
     });
@@ -41,8 +41,8 @@ router.post('/', function(req, res, next) {
 
 router.put('/:_id', function(req, res, next) {
     var param = req.body || {};
-    param.req = contractFormat(param.req, true);
-    param.res = contractFormat(param.res, true);
+    param.req = contractFormat.viewToDb(param.req);
+    param.res = contractFormat.viewToDb(param.res);
     contractModel.findOneAndUpdate({ _id: req.params._id }, param, null, function (error, result) {
         res.json(resHandler(null, error));
     });
