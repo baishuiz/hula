@@ -5,8 +5,8 @@ var db = dbLibs.db;
 var caseSchema = new mongoose.Schema({
     con_id: {type: String},
     name: {type: String},
-    req: {type: Array},
-    res: {type: Array}
+    req: {type: Object},
+    res: {type: Object}
 });
 
 var caseModel = mongoose.model('Case', caseSchema);

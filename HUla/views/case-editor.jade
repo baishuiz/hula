@@ -7,15 +7,18 @@ block content
             span.btn-group
                 a.btn.btn-sm.btn-default.js-back-btn(href=referer, rel='noreferrer') 返回
                 a.btn.btn-sm.btn-success.js-save-case(href='#') 保存
-        
-        -   var loop = function (ary, parentIsList) {
+                
+        -   var loop = function (ary, parentIsList, parentNode) {
         -       if (!ary || !ary.length) {
         -           ary = [{}]
         -       }
         -       var str = [];
-        -       for (var i = 0, len = ary.length, v, isFirst; i < len; i++) {
+        -       parentNode = parentNode || {};
+        -       for (var i = 0, len = ary.length, v, isFirst, isList, subNode; i < len; i++) {
         -           v = ary[i];
         -           isFirst = i === 0;
+        -           isList = v.metadata === 'List';
+        -           subNode = parentNode[v.key];
         -           str.push('<li>');
         -                   str.push('<div class="line"></div>');
         -                   str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
@@ -23,27 +26,36 @@ block content
         -                       str.push('<span class="text">' + (v.remark || '') + '</span>');
         -                       str.push('<span class="text">' + (v.metadata || '') + '</span>');
         -                       if (v.metadata === 'String'){
-        -                           str.push('<input type="text" class="js-input form-control" placeholder="String">');
+        -                           str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + (subNode || '') + '">');
         -                       } else if (v.metadata === 'Number') {
-        -                           str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0">');
+        -                           str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + (subNode || '') + '">');
         -                       } else if (v.metadata === 'Boolean') {
         -                           str.push('<select class="js-boolean">');
-        -                               str.push('<option value="1">True</option>');
-        -                               str.push('<option value="0">False</option>');
+        -                               str.push('<option value="1" ' + ((subNode === 1) ? 'selected' : '') + '>True</option>');
+        -                               str.push('<option value="0" ' + ((subNode === 0) ? 'selected' : '') + '>False</option>');
         -                           str.push('</select>');
         -                       } else if (v.metadata === 'Array') {
-        -                           str.push('<input type="text" class="js-input form-control" placeholder="Array">');
+        -                           str.push('<input type="text" class="js-input form-control" placeholder="Array" value="' + (subNode || []).join(',') + '">');
         -                       }
-        -                       if (parentIsList && i === 0) {
-        -                          str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete</button>');
+        -                       if (isList) {
         -                          str.push('<button class="js-add btn btn-xs btn-success">add</button>');
         -                       }
+        -                       if (parentIsList && i === 0) {
+        -                          str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete ' + i + '</button>');
+        -                       }
         -                   str.push('</div>');
-        -                   var isList = v.metadata === 'List';
         -                   if (v.metadata === 'Object' || isList) {
-        -                       str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
-        -                               str.push(loop(v.value, isList));
-        -                       str.push('</ul>');
+        -                       if (Array.isArray(subNode)) {
+        -                           subNode.forEach(function(tmpNode){ 
+        -                               str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
+        -                                   str.push(loop(v.value, isList, tmpNode));
+        -                               str.push('</ul>');
+        -                           });
+        -                       } else {
+        -                           str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
+        -                               str.push(loop(v.value, isList, subNode));
+        -                           str.push('</ul>');
+        -                       }
         -                   }
         -           str.push('</li>')
         -       }
@@ -52,18 +64,18 @@ block content
         
         h3.sub-header Name
         .case-table-wrapper
-            input.form-control.js-name(type='text', placeholder='Name')
+            input.form-control.js-name(type='text', placeholder='Name', value=name)
         
         h3.sub-header Request
         .case-table-wrapper
             ul.common-list.js-req
-                != loop(req)
+                != loop(con_req, false, case_req)
             
                 
         h3.sub-header Response
         .case-table-wrapper
             ul.common-list.js-res
-                != loop(res)
+                != loop(con_res, false, case_res)
                 
     script#tpl_single(type='text/template')
         li

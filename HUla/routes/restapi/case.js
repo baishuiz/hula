@@ -34,8 +34,11 @@ router.post('/', function(req, res, next) {
 });
 
 router.put('/:_id', function(req, res, next) {
+    var param = req.body || {};
+    param.req = caseFormat.viewToDb(param.req);
+    param.res = caseFormat.viewToDb(param.res);
+
     caseModel.findOneAndUpdate({ _id: req.params._id }, req.body, null, function (error, result) {
-        // TODO 格式转换
         res.json(resHandler(null, error));
     });
 });
