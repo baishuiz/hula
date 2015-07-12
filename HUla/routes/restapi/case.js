@@ -4,7 +4,7 @@ var caseModel = require('../../modules/case');
 var resHandler = require('../../libs/resHandler');
 var caseFormat = require('../../libs/caseFormat');
 
-router.get('/', function(req, res, next) {
+router.get('/restapi/case/', function(req, res, next) {
     var con_id = req.query.con_id;
     caseModel.find({ con_id: con_id }, null, function(error, result){
         // TODO 格式转换
@@ -16,14 +16,14 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.get('/:_id', function(req, res, next) {
+router.get('/restapi/case/:_id', function(req, res, next) {
     caseModel.findById(req.params._id, null, function(error, result){
         // TODO 格式转换
         res.json(resHandler({ case: result }, error));
     });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/restapi/case/', function(req, res, next) {
     var param = req.body || {};
     param.req = caseFormat.viewToDb(param.req);
     param.res = caseFormat.viewToDb(param.res);
@@ -33,20 +33,20 @@ router.post('/', function(req, res, next) {
     });
 });
 
-router.put('/:_id', function(req, res, next) {
+router.put('/restapi/case/:_id', function(req, res, next) {
     caseModel.findOneAndUpdate({ _id: req.params._id }, req.body, null, function (error, result) {
         // TODO 格式转换
         res.json(resHandler(null, error));
     });
 });
 
-router.delete('/', function(req, res, next) {
+router.delete('/restapi/case/', function(req, res, next) {
     caseModel.removeAll(req.body.ids, null, function (error, result) {
         res.json(resHandler(null, error));
     });
 });
 
-router.delete('/:_id', function(req, res, next) {
+router.delete('/restapi/case/:_id', function(req, res, next) {
     caseModel.findByIdAndRemove(req.params._id, null, function (error, result) {
         res.json(resHandler(null, error));
     });

@@ -6,7 +6,7 @@ var contractFormat = require('../libs/contractFormat');
 
 // TODO 后续契约主页面可以单独访问，并根据select新建契约
 
-router.get('/', function(req, res, next) {
+router.get('/contract/', function(req, res, next) {
     var findContract = function (service) {
         service = service || {};
         var reqObj = req.query.srv_id ? { srv_id: req.query.srv_id } : {};
@@ -41,11 +41,11 @@ router.get('/', function(req, res, next) {
             }
         });
     } else {
-        res.redirect('/service');
+        res.redirect('/services');
     }
 });
 
-router.get('/new', function(req, res, next) {
+router.get('/contract/new', function(req, res, next) {
     res.render('contract-editor', {
         title: '新增契约',
         contract: {},
@@ -58,7 +58,7 @@ router.get('/new', function(req, res, next) {
     });
 });
 
-router.get('/:_id', function(req, res, next) {
+router.get('/contract/:_id', function(req, res, next) {
     contractModel.findById(req.params._id, null, function (error, result) {
         result = result || {};
         res.render('contract-editor', {
@@ -75,7 +75,7 @@ router.get('/:_id', function(req, res, next) {
     });
 });
 
-router.get('/delete/:_id', function(req, res, next) {
+router.get('/contract/delete/:_id', function(req, res, next) {
     contractModel.findByIdAndRemove(req.params._id, null, function (error, result) {
         if (error) {
             res.render('error', { title: '错误', message: '错误', nav: 'service', error: error });
