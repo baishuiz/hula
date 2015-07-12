@@ -289,9 +289,7 @@
                 res: resData
             }, function (data) {
                 UI.hideLoading();
-                if (!id) {
-                    window.location.href = '/contract/?srv_id=' + srv_id;
-                }
+                window.location.href = '/contract/?srv_id=' + srv_id;
             }, function (error) {
                 UI.hideLoading();
                 error.msg && UI.showError(error.msg);
@@ -307,7 +305,7 @@
         var $casePage = $('.case-page');
 
         $casePage.on('click', '.js-add', function (e) {
-            var $curSubTree = $(this).closest('.list-tree');
+            var $curSubTree = $(this).closest('.input-wrap').next('.list-tree').first();
             var $appendTree = $curSubTree.clone();
             $appendTree.find('.js-input').val('');
             $curSubTree.after($appendTree);
@@ -393,9 +391,7 @@
                 res: resData
             }, function (data) {
                 UI.hideLoading();
-                if (!id) {
-                    window.location.href = $('.js-back-btn').attr('href');
-                }
+                window.location.href = $('.js-back-btn').attr('href');
             }, function (error) {
                 UI.hideLoading();
                 error.msg && UI.showError(error.msg);
