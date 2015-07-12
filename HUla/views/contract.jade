@@ -4,12 +4,12 @@ block content
     .contract-page
         h1.page-header= title
             span.btn-group
-                a.btn.btn-sm.btn-default(href='/service', rel='noreferrer') 返回
+                a.btn.btn-sm.btn-default(href='/services', rel='noreferrer') 返回
                 a.btn.btn-sm.btn-success(href='/contract/new' + '?srv_id=' + (srv_id || '') + '&no=' + (NO || '')) 新增
         - if (showSubTitle)
             h3.sub-header
                 | 服务： #{NO}
-        
+
         .panel.panel-default
             table.table.table-striped
                 thead

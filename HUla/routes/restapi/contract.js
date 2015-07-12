@@ -4,7 +4,7 @@ var contractModel = require('../../modules/contract');
 var contractFormat = require('../../libs/contractFormat');
 var resHandler = require('../../libs/resHandler');
 
-router.get('/', function(req, res, next) {
+router.get('/restapi/contract/', function(req, res, next) {
     contractModel.find(null, null, function(error, result){
         result = result || [];
         result.forEach(function (obj) {
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.get('/:_id', function(req, res, next) {
+router.get('/restapi/contract/:_id', function(req, res, next) {
     contractModel.findById(req.params._id, null, function(error, result){
         result = result || {};
         result.req = contractFormat.dbToView(result.req);
@@ -30,7 +30,7 @@ router.get('/:_id', function(req, res, next) {
     });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/restapi/contract/', function(req, res, next) {
     var param = req.body || {};
     param.req = contractFormat.viewToDb(param.req);
     param.res = contractFormat.viewToDb(param.res);
@@ -39,7 +39,7 @@ router.post('/', function(req, res, next) {
     });
 });
 
-router.put('/:_id', function(req, res, next) {
+router.put('/restapi/contract/:_id', function(req, res, next) {
     var param = req.body || {};
     param.req = contractFormat.viewToDb(param.req);
     param.res = contractFormat.viewToDb(param.res);
@@ -48,13 +48,13 @@ router.put('/:_id', function(req, res, next) {
     });
 });
 
-router.delete('/', function(req, res, next) {
+router.delete('/restapi/contract/', function(req, res, next) {
     contractModel.removeAll(req.body.ids, null, function (error, result) {
         res.json(resHandler(null, error));
     });
 });
 
-router.delete('/:_id', function(req, res, next) {
+router.delete('/restapi/contract/:_id', function(req, res, next) {
     contractModel.findByIdAndRemove(req.params._id, null, function (error, result) {
         res.json(resHandler(null, error));
     });

@@ -7,7 +7,7 @@ var caseFormat = require('../libs/caseFormat');
 
 // TODO 后续case主页面可以单独访问，并根据select的服务和契约新建case
 
-router.get('/', function(req, res, next) {
+router.get('/case/', function(req, res, next) {
     var reqObj = req.query.con_id ? { con_id: req.query.con_id } : {};
 
     caseModel.find(reqObj, null, function (error, result) {
@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.get('/new', function(req, res, next) {
+router.get('/case/new', function(req, res, next) {
     var srv_id = req.query.srv_id || '';
     var referer = req.header('Referer') || ('/contract/?srv_id=' + (srv_id || ''));
     contractModel.findById(req.query.con_id, null, function (error, result) {
@@ -53,9 +53,10 @@ router.get('/new', function(req, res, next) {
     });
 });
 
-router.get('/:_id', function(req, res, next) {
+router.get('/case/:_id', function(req, res, next) {
     var srv_id = req.query.srv_id || '';
     var referer = req.header('Referer') || ('/contract/?srv_id=' + (srv_id || ''));
+    
     caseModel.findById(req.params._id, null, function (error, result) {
         result = result || {};
         var con_id = result.con_id || req.query.con_id;
@@ -90,7 +91,7 @@ router.get('/:_id', function(req, res, next) {
     });
 });
 
-router.get('/delete/:_id', function(req, res, next) {
+router.get('/case/delete/:_id', function(req, res, next) {
     caseModel.findByIdAndRemove(req.params._id, null, function (error, result) {
         if (error) {
             res.render('error', { title: '错误', message: '错误', nav: 'service', error: error });
