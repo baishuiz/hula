@@ -7,12 +7,12 @@ var bodyParser = require('body-parser');
 global._ = global._ || require('underscore');
 
 var routes = require('./routes/index');
-var contractRouter = require('./routes/contract');
-var serviceRouter = require('./routes/service');
-var caseRouter = require('./routes/case');
-var restServiceRouter = require('./routes/restapi/service');
-var restContractRouter = require('./routes/restapi/contract');
-var restCaseRouter = require('./routes/restapi/case');
+// var contractRouter = require('./routes/contract');
+// var serviceRouter = require('./routes/service');
+// var caseRouter = require('./routes/case');
+// var restServiceRouter = require('./routes/restapi/service');
+// var restContractRouter = require('./routes/restapi/contract');
+// var restCaseRouter = require('./routes/restapi/case');
 
 var app = express();
 
@@ -28,13 +28,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/service', serviceRouter);
-app.use('/contract', contractRouter);
-app.use('/case', caseRouter);
-app.use('/restapi/service', restServiceRouter);
-app.use('/restapi/contract', restContractRouter);
-app.use('/restapi/case', restCaseRouter)
+
+ app.use('/', routes);
+// app.use('/service', serviceRouter);
+// app.use('/contract', contractRouter);
+// app.use('/case', caseRouter);
+// app.use('/restapi/service', restServiceRouter);
+// app.use('/restapi/contract', restContractRouter);
+// app.use('/restapi/case', restCaseRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
