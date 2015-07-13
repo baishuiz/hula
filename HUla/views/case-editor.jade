@@ -73,14 +73,14 @@ block content
             ul.common-list.js-req
                 != loop(con_req, false, case_req)
         strong 直接输入字符串Request对象
-        textarea(id="js_caseReqString", rows=2, style="width:99%")
+        textarea.form-control(id="js_caseReqString", rows=2, style="width:99%")
 
         h3.sub-header Response
         .case-table-wrapper
             ul.common-list.js-res
                 != loop(con_res, false, case_res)
         strong 直接输入字符串Response对象
-        textarea(id="js_caseResString", rows=2, style="width:99%")
+        textarea.form-control(id="js_caseResString", rows=2, style="width:99%")
 
     script#tpl_single(type='text/template')
         li

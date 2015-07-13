@@ -3,8 +3,33 @@ extends layout
 block content
     .case-page#case-result
         h1.page-header= title
+            span.btn-group
+                a.btn.btn-sm.btn-default(href=referer, rel='noreferrer') 返回
+                a.btn.btn-sm.btn-success.js-re-run(href='#') 重新执行
         
         input.js-cases(type='hidden', name='cases', value=JSON.stringify(cases))
         input.js-contract(type='hidden', name='contract', value=JSON.stringify(contract))
         input.js-service(type='hidden', name='service', value=JSON.stringify(service))
+        input.js-host(type='hidden', name='host', value=(host && JSON.stringify(host)))
+        input.js-sub-env(type='hidden', name='sub-env', value=(subEnv && JSON.stringify(subEnv)))
+        input.js-need-sub-env(type='hidden', name='need-sub-env', value=(needSubEvn && JSON.stringify(needSubEvn)))
+        input.js-auth(type='hidden', name='auth', value=(auth && JSON.stringify(auth)))
         
+        .panel.panel-default
+            table.table.table-striped.case-result-table
+                thead
+                    tr
+                        th Name
+                        th(width=80) Status
+                        th(width='80%') Detail
+                tbody.js-cases
+                    - each caseObj in cases
+                        - var tmp_srv_id = srv_id || caseObj._srv_id || ''
+                        - var tmp_NO = NO || caseObj.NO || ''
+                        tr(data-id=(caseObj._id && caseObj._id.toString()))
+                            td= caseObj.name
+                            td.js-status
+                            td.js-detail
+                    - else
+                        tr.js-empty
+                            td.align-center(colspan=3) 暂无用例
