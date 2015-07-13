@@ -396,8 +396,18 @@
                 UI.hideLoading();
                 error.msg && UI.showError(error.msg);
             })
-
         });
+
+        // Run Case
+        (function () {
+            $caseResultPage = $('#case-result');
+            if ($caseResultPage.length) {
+                var cases = JSON.parse($caseResultPage.find('.js-cases').val() || '[]');
+                var contract = JSON.parse($caseResultPage.find('.js-contract').val() || '{}');
+                var service = JSON.parse($caseResultPage.find('.js-service').val() || '{}');
+
+            }
+        })();
     };
 
     $(document).on('ready', function () {

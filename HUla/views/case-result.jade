@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    .case-page#case-result
+        h1.page-header= title
+        
+        input.js-cases(type='hidden', name='cases', value=JSON.stringify(cases))
+        input.js-contract(type='hidden', name='contract', value=JSON.stringify(contract))
+        input.js-service(type='hidden', name='service', value=JSON.stringify(service))
+        

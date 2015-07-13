@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var caseModel = require('../modules/case');
 var contractModel = require('../modules/contract');
+var serviceModel = require('../modules/service');
 var contractFormat = require('../libs/contractFormat');
 var caseFormat = require('../libs/caseFormat');
 
@@ -88,6 +89,25 @@ router.get('/case/:_id', function(req, res, next) {
                 }
             });
         }
+    });
+});
+
+router.post('/case/result/', function(req, res, next) {
+    var caseIds = (req.body.ids || '').split(',');
+    caseModel.find({_id: { $in: caseIds } }, function (error, cases) {
+        var conIds = _.pluck(cases, 'con_id');
+        contractModel.find({_id: {$in : conIds}}, function (error, contracts) {
+            var srvIds = _.pluck(contracts, 'srv_id');
+            serviceModel.find({_id: {$in : srvIds}}, function (error, services) {
+                res.render('case-result', {
+                    title: '执行用例',
+                    nav: 'service',
+                    cases: cases,
+                    contract: contracts && contracts[0],
+                    service: services && services[0]
+                });
+            });
+        });
     });
 });
 

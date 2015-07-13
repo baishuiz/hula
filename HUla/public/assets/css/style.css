@@ -24,7 +24,7 @@ body {
 .align-center {
     text-align: center;
 }
-.table .action-group a {
+.table .action-group .btn {
     margin-left: 10px;
 }
 
