@@ -65,7 +65,7 @@ function Cell(lineData, index){
 			break;
 	}
 
-	return { name: lineData[shortIndex], index: index, type: jstype, desc : desc };
+	return { name: (lineData[shortIndex] || '').trim(), index: index, type: jstype, desc : desc };
 }
 
 function parse(data, startindex, endindex){
