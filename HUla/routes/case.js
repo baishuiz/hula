@@ -56,7 +56,7 @@ router.get('/case/new', function(req, res, next) {
 router.get('/case/:_id', function(req, res, next) {
     var srv_id = req.query.srv_id || '';
     var referer = req.header('Referer') || ('/contract/?srv_id=' + (srv_id || ''));
-    
+
     caseModel.findById(req.params._id, null, function (error, result) {
         result = result || {};
         var con_id = result.con_id || req.query.con_id;
@@ -75,7 +75,7 @@ router.get('/case/:_id', function(req, res, next) {
                             con_req: contractFormat.dbToView(contract.req),
                             con_res: contractFormat.dbToView(contract.res),
                             case_req: result.req,
-                            case_res: caseFormat.dbToView(result.res),
+                            case_res: result.res,
                             nav: 'service',
                             errorMsg: error && error.msg,
                             id: result && result._id && result._id.toString(),
