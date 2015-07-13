@@ -2,36 +2,52 @@ extends layout
 
 block content
     .case-page
-        h1.page-header= title
-            span.btn-group
-                a.btn.btn-sm.btn-default(href=referer, rel='noreferrer') 返回
-                a.btn.btn-sm.btn-success(href='/case/new' + '?con_id=' + con_id + '&srv_id=' + (srv_id || '') + '&no=' + (NO || '')) 新增
-        h3.sub-header
-            | 服务： #{NO}
-        .input-group.evn-input
-            span.input-group-addon 执行环境
-            input.form-control.js-env(type='text')
-        
-        .panel.panel-default
-            table.table.table-striped
-                thead
-                    tr
-                        th Service NO.
-                        th Name
-                        th Action
-                tbody
-                    - each caseObj in cases
-                        - var tmp_srv_id = srv_id || caseObj._srv_id || ''
-                        - var tmp_NO = NO || caseObj.NO || ''
-                        tr(data-id=(caseObj._id && caseObj._id.toString()))
-                            td= NO
-                            td= caseObj.name
-                            td.action-group
-                                form(method='post', action='/case/result/')
-                                    input(type='hidden', name='ids', value=(caseObj._id && caseObj._id.toString()))
+        form#case-run-form(method='post', action='/case/result/')
+            h1.page-header= title
+                span.btn-group
+                    a.btn.btn-sm.btn-default(href=referer, rel='noreferrer') 返回
+                    a.btn.btn-sm.btn-success(href='/case/new' + '?con_id=' + con_id + '&srv_id=' + (srv_id || '') + '&no=' + (NO || '')) 新增
+            h3.sub-header
+                | 服务： #{NO}
+            .input-group
+                span.input-group-addon 执行环境
+                select.form-control.js-env(name='env')
+                    option(value='fat') 测试
+                    option(value='uat') UAT
+                    option(value='pro') 生产
+                input.form-control(name='custom_env', placeholder='输入自定义测试环境，默认fat80')
+            .input-group
+                span.input-group-addon Auth
+                input.form-control.js-auth(type='text', name='auth')
+            
+            .panel.panel-default
+                table.table.table-striped.cases-table
+                    thead
+                        tr
+                            th.align-center(width=20) #
+                            th Name
+                            th Action
+                    tbody
+                        - each caseObj in cases
+                            - var tmp_srv_id = srv_id || caseObj._srv_id || ''
+                            - var tmp_NO = NO || caseObj.NO || ''
+                            tr(data-id=(caseObj._id && caseObj._id.toString()))
+                                td.align-center
+                                    input.js-check(type='checkbox')
+                                td= caseObj.name
+                                td.action-group
                                     a.btn.btn-sm.btn-default(href='/case/' + caseObj._id + '?con_id=' + con_id + '&srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 编辑
                                     a.btn.btn-sm.btn-danger(href='/case/delete/' + caseObj._id) 删除
                                     button.btn.btn-sm.btn-success.js-run(type='submit') 执行
-                    - else
-                        tr.js-empty
-                            td.align-center(colspan=3) 暂无用例
+                        - else
+                            tr.js-empty
+                                td.align-center(colspan=3) 暂无用例
+                        - if (cases && cases.length) {
+                            tr
+                                td
+                                    button.btn.btn-sm.btn-default.js-select-all 全选
+                                td(rowspan=2)
+                                    button.btn.btn-sm.btn-success.js-run-all 执行选中
+                        - }
+                        
+            input(type='hidden', name='ids')
