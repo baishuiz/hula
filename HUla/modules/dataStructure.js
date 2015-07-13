@@ -16,12 +16,12 @@ var dataType = utility.enumCreater([
 * @param 解析获取index
 */
 var shortIndex =0,  //short name 在第几列
-    metadataIndex = 0, //metadata 在第几列	 
+    metadataIndex = 0, //metadata 在第几列
     descIndex = 0 ; //描述 在第几列
-function parseIndex(title){   
+function parseIndex(title){
     var findShortNameIndex = false,findTypeIndex = false, finddesc = false;
   	for(var i =0,len=title.length;i <len;i++){
-		var col = title[i];		
+		var col = title[i];
 		if(/Short\s?Name/i.test(col)){
 		  shortIndex = i;
 		  findShortNameIndex = true;
@@ -40,25 +40,26 @@ function parseIndex(title){
 	}
 }
 
-function Cell(lineData, index){    
-	var type = lineData[metadataIndex] || dataType.NullableClass;	
-	var desc = lineData[descIndex];	
+function Cell(lineData, index){
+	var type = lineData[metadataIndex] || dataType.NullableClass;
+	var desc = lineData[descIndex];
 	var jstype = "String";
 	switch(true){
+        // TODO 数组Array
 		case type == dataType.NullableClass:
-			jstype = "object";
+			jstype = "Object";
 			break;
 		case type == dataType.List:
-			jstype = "array";
-			break;			
+			jstype = "List";
+			break;
 		case type == dataType.Boolean:
 			jstype = "Boolean";
-			break;		
+			break;
 		case type == dataType.Price:
 		case type.indexOf(dataType.Int)>=0:
 			jstype = "Number";
 			break;
-		case type == dataType.DateTime:			
+		case type == dataType.DateTime:
 		case type == dataType.Dynamic:
 		default:
 			break;
@@ -67,7 +68,7 @@ function Cell(lineData, index){
 	return { name: lineData[shortIndex], index: index, type: jstype, desc : desc };
 }
 
-function parse(data, startindex, endindex){	
+function parse(data, startindex, endindex){
 	var root = {};
     for (var rowIndex = startindex; rowIndex < endindex; rowIndex++) {
     	var lineData = data[rowIndex];
@@ -83,6 +84,6 @@ function parse(data, startindex, endindex){
 }
 
 module.exports = function(data, startindex, endindex){
-	parseIndex(data[0]);	
+	parseIndex(data[0]);
 	return parse(data, startindex, endindex);
 }
