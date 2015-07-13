@@ -218,6 +218,7 @@ body {
     left: -75px;
     top: 40px;
 }
-.case-table-wrapper .common-list .list-tree>li>.line {
 
+.case-result-table {
+    word-break: break-all;
 }

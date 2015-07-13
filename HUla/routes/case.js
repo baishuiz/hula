@@ -93,7 +93,26 @@ router.get('/case/:_id', function(req, res, next) {
 });
 
 router.post('/case/result/', function(req, res, next) {
+    var referer = req.header('Referer') || ('/contract/?srv_id=' + (srv_id || ''));
     var caseIds = (req.body.ids || '').split(',');
+    var host = '';
+    var subEnv = req.body.custom_env;
+    var needSubEvn = false;
+    switch (req.body.env) {
+        case 'pro':
+            host = 'm.ctrip.com';
+            break;
+        case 'uat':
+            host = 'gateway.m.uat.qa.ctripcorp.com';
+            break;
+        case 'fat':
+            host = 'gateway.m.fws.qa.nt.ctripcorp.com';
+            needSubEvn = true;
+            break;
+        default:
+            host = 'm.ctrip.com';
+    }
+
     caseModel.find({_id: { $in: caseIds } }, function (error, cases) {
         var conIds = _.pluck(cases, 'con_id');
         contractModel.find({_id: {$in : conIds}}, function (error, contracts) {
@@ -104,7 +123,12 @@ router.post('/case/result/', function(req, res, next) {
                     nav: 'service',
                     cases: cases,
                     contract: contracts && contracts[0],
-                    service: services && services[0]
+                    service: services && services[0],
+                    host: host,
+                    needSubEvn: needSubEvn,
+                    subEnv: subEnv,
+                    auth: req.body.auth || '',
+                    referer: referer
                 });
             });
         });
