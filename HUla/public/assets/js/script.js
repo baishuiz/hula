@@ -3,7 +3,139 @@
     /*
     * Utility
     */
-    var Util = {};
+    var Util = {
+        // Internal recursive comparison function for `isEqual`.
+        isEqual: function(a, b, aStack, bStack) {
+            // Save bytes in the minified (but not gzipped) version:
+            var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+            // Create quick reference variables for speed access to core prototypes.
+            var
+                push             = ArrayProto.push,
+                slice            = ArrayProto.slice,
+                toString         = ObjProto.toString,
+                hasOwnProperty   = ObjProto.hasOwnProperty;
+            // All **ECMAScript 5** native function implementations that we hope to use
+            // are declared here.
+            var
+                nativeIsArray      = Array.isArray,
+                nativeKeys         = Object.keys,
+                nativeBind         = FuncProto.bind,
+                nativeCreate       = Object.create;
+
+            var isFunction = function(obj) {
+                return typeof obj == 'function' || false;
+            };
+            // Is a given variable an object?
+            isObject = function(obj) {
+                var type = typeof obj;
+                return type === 'function' || type === 'object' && !!obj;
+            };
+            var has = function(obj, key) {
+                return obj != null && hasOwnProperty.call(obj, key);
+            };
+
+            // Retrieve the names of an object's own properties.
+            // Delegates to **ECMAScript 5**'s native `Object.keys`
+            getKeys = function(obj) {
+              if (!isObject(obj)) return [];
+              if (nativeKeys) return nativeKeys(obj);
+              var keys = [];
+              for (var key in obj) if (has(obj, key)) keys.push(key);
+              return keys;
+            };
+
+            // Identical objects are equal. `0 === -0`, but they aren't identical.
+            // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+            if (a === b) return a !== 0 || 1 / a === 1 / b;
+            // A strict comparison is necessary because `null == undefined`.
+            if (a == null || b == null) return a === b;
+            // Unwrap any wrapped objects.
+            // if (a instanceof _) a = a._wrapped;
+            // if (b instanceof _) b = b._wrapped;
+            // Compare `[[Class]]` names.
+            var className = toString.call(a);
+            if (className !== toString.call(b)) return false;
+            switch (className) {
+                // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+                case '[object RegExp]':
+                // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+                case '[object String]':
+                    // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+                    // equivalent to `new String("5")`.
+                    return '' + a === '' + b;
+                case '[object Number]':
+                    // `NaN`s are equivalent, but non-reflexive.
+                    // Object(NaN) is equivalent to NaN
+                    if (+a !== +a) return +b !== +b;
+                    // An `egal` comparison is performed for other numeric values.
+                    return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+                case '[object Date]':
+                case '[object Boolean]':
+                    // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+                    // millisecond representations. Note that invalid dates with millisecond representations
+                    // of `NaN` are not equivalent.
+                    return +a === +b;
+            }
+
+            var areArrays = className === '[object Array]';
+            if (!areArrays) {
+                if (typeof a != 'object' || typeof b != 'object') return false;
+
+                // Objects with different constructors are not equivalent, but `Object`s or `Array`s
+                // from different frames are.
+                var aCtor = a.constructor, bCtor = b.constructor;
+                if (aCtor !== bCtor && !(isFunction(aCtor) && aCtor instanceof aCtor &&
+                                                                 isFunction(bCtor) && bCtor instanceof bCtor)
+                                                        && ('constructor' in a && 'constructor' in b)) {
+                    return false;
+                }
+            }
+            // Assume equality for cyclic structures. The algorithm for detecting cyclic
+            // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+
+            // Initializing stack of traversed objects.
+            // It's done here since we only need them for objects and arrays comparison.
+            aStack = aStack || [];
+            bStack = bStack || [];
+            var length = aStack.length;
+            while (length--) {
+                // Linear search. Performance is inversely proportional to the number of
+                // unique nested structures.
+                if (aStack[length] === a) return bStack[length] === b;
+            }
+
+            // Add the first object to the stack of traversed objects.
+            aStack.push(a);
+            bStack.push(b);
+
+            // Recursively compare objects and arrays.
+            if (areArrays) {
+                // Compare array lengths to determine if a deep comparison is necessary.
+                length = a.length;
+                if (length !== b.length) return false;
+                // Deep compare the contents, ignoring non-numeric properties.
+                while (length--) {
+                    if (!Util.isEqual(a[length], b[length], aStack, bStack)) return false;
+                }
+            } else {
+                // Deep compare objects.
+                var keys = getKeys(a), key;
+                length = keys.length;
+                // Ensure that both objects contain the same number of properties before comparing deep equality.
+                if (getKeys(b).length !== length) return false;
+                while (length--) {
+                    // Deep compare each member
+                    key = keys[length];
+                    if (!(has(b, key) && Util.isEqual(a[key], b[key], aStack, bStack))) return false;
+                }
+            }
+            // Remove the first object from the stack of traversed objects.
+            aStack.pop();
+            bStack.pop();
+            return true;
+        }
+    };
 
     /*
     * UI
@@ -492,14 +624,124 @@
           var reshtml = loop(con_res, false, responseObj);
           responseBox.html(reshtml);
         });
+
+        // select all
+        $casePage.on('click', '.js-select-all', function (e) {
+            e.preventDefault();
+            $casePage.find('.js-check').prop('checked', true);
+        });
+
+        $caseRunForm = $('#case-run-form');
+
+        // run case
+        $casePage.on('click', '.js-run', function (e) {
+            e.preventDefault();
+            var $root = $(this).closest('tr');
+            var id = $root.attr('data-id');
+            var $input = $caseRunForm.find('input[name="ids"]');
+
+            if (id) {
+                $input.val(id);
+                $caseRunForm.submit();
+            } else {
+                $input.val('');
+                return false;
+            }
+        });
+
+        // run all case
+        $casePage.on('click', '.js-run-all', function (e) {
+            e.preventDefault();
+            var $selectedCB = $casePage.find('.cases-table .js-check:checked');
+            var ids = [];
+            $selectedCB.each(function () {
+                var id = $(this).closest('tr').attr('data-id');
+                id && ids.push(id);
+            });
+
+            var $input = $caseRunForm.find('input[name="ids"]');
+            if (ids.length) {
+                $input.val(ids.join(','));
+                $caseRunForm.submit();
+            } else {
+                $input.val('');
+                return false;
+            }
+        });
+
         // Run Case
         (function () {
             $caseResultPage = $('#case-result');
             if ($caseResultPage.length) {
+                var $cases = $caseResultPage.find('.js-cases>tr');
+                $cases.find('.js-status, .js-detail').text('');
+
+                $caseResultPage.on('click', '.js-re-run', function (e) {
+                    e.preventDefault();
+                    $cases.removeAttr('class');
+                    $cases.find('.js-status, .js-detail').text('');
+                    sentReq();
+                });
+
                 var cases = JSON.parse($caseResultPage.find('.js-cases').val() || '[]');
                 var contract = JSON.parse($caseResultPage.find('.js-contract').val() || '{}');
                 var service = JSON.parse($caseResultPage.find('.js-service').val() || '{}');
+                var host = JSON.parse($caseResultPage.find('.js-host').val() || 'null');
+                var subEnv = JSON.parse($caseResultPage.find('.js-sub-env').val() || 'null');
+                var needSubEvn = JSON.parse($caseResultPage.find('.js-need-sub-env').val() || 'false');
+                var auth = JSON.parse($caseResultPage.find('.js-auth').val() || 'null');
+                var url = 'http://' + host + '/restapi/soa2/' + service.url + ( needSubEvn ? ('?subEnv=' + (subEnv || 'fat80')) : '');
 
+                var sentReq = function (i) {
+                    i = i || 0;
+                    var caseObj = cases[i];
+                    var $caseElm = $cases.eq(i);
+                    var $statusElm = $caseElm.find('.js-status');
+                    var $detailElm = $caseElm.find('.js-detail');
+                    $caseElm.addClass('warning');
+                    $statusElm.text('发送中...');
+
+                    if (caseObj) {
+                        $.extend(caseObj.req, {
+                            contentType: 'json',
+                            head: {
+                                auth: auth || null,
+                                cid: '',
+                                ctok: '',
+                                cver: '1.0',
+                                lang: '01',
+                                sid: '8888',
+                                syscode: '09'
+                            }
+                        });
+
+                        Ajax.post(url, caseObj.req, function (data) {
+                            data = data || {};
+                            delete data.head;
+                            delete data.ResponseStatus;
+
+                            var isEqual = Util.isEqual(caseObj.res, data);
+
+                            if (isEqual) {
+                                $caseElm.removeClass('warning').addClass('success');
+                                $statusElm.text('成功');
+                                $detailElm.text('');
+                            } else {
+                                $caseElm.addClass('danger');
+                                $statusElm.text('失败');
+                                $detailElm.text(JSON.stringify(data));
+                            }
+                            sentReq(i + 1);
+                        }, function (error) {
+                            $caseElm.removeClass('warning').addClass('danger');
+                            $statusElm.text('失败');
+                            $detailElm.text(JSON.stringify(error));
+                            sentReq(i + 1);
+                        });
+                    }
+                };
+
+                sentReq();
             }
         })();
     };

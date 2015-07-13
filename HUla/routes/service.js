@@ -13,7 +13,7 @@ router.get('/service/delete/:_id', function(req, res, next) {
         if (error) {
             res.render('error', { title: '错误', message: '错误', nav: 'service', error: error });
         } else {
-            res.redirect('/service');
+            res.redirect('/services');
         }
     });
 });

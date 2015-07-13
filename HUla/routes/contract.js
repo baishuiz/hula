@@ -61,6 +61,7 @@ router.get('/contract/new', function(req, res, next) {
 router.get('/contract/:_id', function(req, res, next) {
     contractModel.findById(req.params._id, null, function (error, result) {
         result = result || {};
+        console.log(result.req);
         res.render('contract-editor', {
             title: '编辑契约',
             contract: result || {},
