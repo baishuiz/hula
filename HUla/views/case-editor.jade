@@ -2,12 +2,14 @@ extends layout
 
 block content
     .case-page(data-id=id, data-srv-id=srv_id, data-no=NO, data-con-id=con_id)
+        input(type="hidden", id="js_con_req", value=JSON.stringify(con_req))
+        input(type="hidden", id="js_con_res", value=JSON.stringify(con_res))
         h1.page-header
             = title
             span.btn-group
                 a.btn.btn-sm.btn-default.js-back-btn(href=referer, rel='noreferrer') 返回
                 a.btn.btn-sm.btn-success.js-save-case(href='#') 保存
-                
+
         -   var loop = function (ary, parentIsList, parentNode) {
         -       if (!ary || !ary.length) {
         -           ary = [{}]
@@ -46,7 +48,7 @@ block content
         -                   str.push('</div>');
         -                   if (v.metadata === 'Object' || isList) {
         -                       if (Array.isArray(subNode)) {
-        -                           subNode.forEach(function(tmpNode){ 
+        -                           subNode.forEach(function(tmpNode){
         -                               str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
         -                                   str.push(loop(v.value, isList, tmpNode));
         -                               str.push('</ul>');
@@ -61,22 +63,25 @@ block content
         -       }
         -       return str.join('');
         -   }
-        
+
         h3.sub-header Name
         .case-table-wrapper
             input.form-control.js-name(type='text', placeholder='Name', value=name)
-        
+
         h3.sub-header Request
         .case-table-wrapper
             ul.common-list.js-req
                 != loop(con_req, false, case_req)
-            
-                
+        strong 直接输入字符串Request对象
+        textarea(id="js_caseReqString", rows=2, style="width:99%")
+
         h3.sub-header Response
         .case-table-wrapper
             ul.common-list.js-res
                 != loop(con_res, false, case_res)
-                
+        strong 直接输入字符串Response对象
+        textarea(id="js_caseResString", rows=2, style="width:99%")
+
     script#tpl_single(type='text/template')
         li
             .input-wrap
@@ -91,7 +96,7 @@ block content
                   option(value='List') List
                 button.btn.btn-xs.btn-danger.btn-delete.js-delete delete
                 button.btn.btn-xs.btn-success.js-add add
-            
+
     script#tpl_extend(type='text/template')
         ul
             li
