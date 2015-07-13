@@ -398,6 +398,100 @@
             })
         });
 
+        //copy form template by melvin.ren
+        var loop = function (ary, parentIsList, parentNode) {
+            if (!ary || !ary.length) {
+                ary = [{}]
+            }
+            var str = [];
+            parentNode = parentNode || {};
+            for (var i = 0, len = ary.length, v, isFirst, isList, subNode; i < len; i++) {
+                v = ary[i];
+                isFirst = i === 0;
+                isList = v.metadata === 'List';
+                subNode = parentNode[v.key];
+                str.push('<li>');
+                        str.push('<div class="line"></div>');
+                        str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
+                            str.push('<strong class="text">' + (v.key || '') + '</strong>');
+                            str.push('<span class="text">' + (v.remark || '') + '</span>');
+                            str.push('<span class="text">' + (v.metadata || '') + '</span>');
+                            if (v.metadata === 'String'){
+                                str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + (subNode || '') + '">');
+                            } else if (v.metadata === 'Number') {
+                                str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + (subNode || '') + '">');
+                            } else if (v.metadata === 'Boolean') {
+                                str.push('<select class="js-boolean">');
+                                    str.push('<option value="1" ' + ((subNode === 1) ? 'selected' : '') + '>True</option>');
+                                    str.push('<option value="0" ' + ((subNode === 0) ? 'selected' : '') + '>False</option>');
+                                str.push('</select>');
+                            } else if (v.metadata === 'Array') {
+                                str.push('<input type="text" class="js-input form-control" placeholder="Array" value="' + (subNode || []).join(',') + '">');
+                            }
+                            if (isList) {
+                               str.push('<button class="js-add btn btn-xs btn-success">add</button>');
+                            }
+                            if (parentIsList && i === 0) {
+                               str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete</button>');
+                            }
+                        str.push('</div>');
+                        if (v.metadata === 'Object' || isList) {
+                            if (Array.isArray(subNode)) {
+                                subNode.forEach(function(tmpNode){
+                                    str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
+                                        str.push(loop(v.value, isList, tmpNode));
+                                    str.push('</ul>');
+                                });
+                            } else {
+                                str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
+                                    str.push(loop(v.value, isList, subNode));
+                                str.push('</ul>');
+                            }
+                        }
+                str.push('</li>')
+            }
+            return str.join('');
+        }
+
+        $casePage.on('blur', '#js_caseReqString', function(e){
+          var target = $(e.currentTarget),
+              val = target.val(),
+              con_req = JSON.parse($casePage.find('#js_con_req').val()),
+              requestBox = $casePage.find('.js-req');
+          if(!$.trim(val)){
+            return;
+          }
+          var requestObj ;
+          try{
+            requestObj = JSON.parse(val);
+          }catch(e){
+            UI.showError('输入request格式不正确！')
+            console.log(e);
+            return;
+          }
+          var reqhtml = loop(con_req, false, requestObj);
+          requestBox.html(reqhtml);
+        });
+
+        $casePage.on('blur', '#js_caseResString', function(e){
+          var target = $(e.currentTarget),
+              val = target.val(),
+              con_res = JSON.parse($casePage.find('#js_con_res').val()),
+              responseBox = $casePage.find('.js-res');
+          if(!$.trim(val)){
+            return;
+          }
+          var responseObj ;
+          try{
+            responseObj = JSON.parse(val);
+          }catch(e){
+            UI.showError('输入response格式不正确！')
+            console.log(e);
+            return;
+          }
+          var reshtml = loop(con_res, false, responseObj);
+          responseBox.html(reshtml);
+        });
         // Run Case
         (function () {
             $caseResultPage = $('#case-result');
