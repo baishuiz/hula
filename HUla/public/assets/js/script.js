@@ -698,6 +698,7 @@
                     var $caseElm = $cases.eq(i);
                     var $statusElm = $caseElm.find('.js-status');
                     var $detailElm = $caseElm.find('.js-detail');
+                    $caseElm.addClass('warning');
                     $statusElm.text('发送中...');
 
                     if (caseObj) {
@@ -722,7 +723,7 @@
                             var isEqual = Util.isEqual(caseObj.res, data);
 
                             if (isEqual) {
-                                $caseElm.addClass('success');
+                                $caseElm.removeClass('warning').addClass('success');
                                 $statusElm.text('成功');
                                 $detailElm.text('');
                             } else {
@@ -732,7 +733,7 @@
                             }
                             sentReq(i + 1);
                         }, function (error) {
-                            $caseElm.addClass('danger');
+                            $caseElm.removeClass('warning').addClass('danger');
                             $statusElm.text('失败');
                             $detailElm.text(JSON.stringify(error));
                             sentReq(i + 1);
