@@ -20,7 +20,7 @@ function loopAry (ary) {
                     if (!returnObj[obj.key]) {
                         returnObj[obj.key] = [];
                     }
-                    obj.value.forEach(function (listAry) {
+                    obj.value && obj.value.forEach(function (listAry) {
                         returnObj[obj.key].push(loopAry(listAry));
                     })
                     break;
