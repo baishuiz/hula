@@ -202,7 +202,7 @@
             error = error || {};
 
             return {
-                ack: 0,
+                ack: 1,
                 msg: error.status + ': ' + error.statusText
             }
         }
@@ -765,7 +765,7 @@
                             data = data || {};
                             delete data.head;
                             delete data.ResponseStatus;
-                            
+
                             var isEqual = Util.isEqual(caseObj.res, data);
 
                             if (isEqual) {
