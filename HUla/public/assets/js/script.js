@@ -479,7 +479,9 @@
                         val = $.trim($inputWrap.find('.js-input').val()) || null;
                         break;
                     case 'Number':
-                        val = parseInt($.trim($inputWrap.find('.js-input').val()), 10) || null;
+                        var tmpNum = parseInt($.trim($inputWrap.find('.js-input').val()), 10);
+
+                        val = (typeof tmpNum === 'number' && !Number.isNaN(tmpNum)) ? tmpNum : null;
                         break;
                     case 'Boolean':
                         val = $.trim($inputWrap.find('.js-boolean').val()) == 1;
@@ -567,7 +569,7 @@
                             if (v.metadata === 'String'){
                                 str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + (subNode || '') + '">');
                             } else if (v.metadata === 'Number') {
-                                str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + (subNode || '') + '">');
+                                str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + ((typeof subNode === 'number' && !Number.isNaN(subNode)) ? subNode : null) + '">');
                             } else if (v.metadata === 'Boolean') {
                                 str.push('<select class="js-boolean">');
                                     str.push('<option value="1" ' + ((subNode === 1) ? 'selected' : '') + '>True</option>');
