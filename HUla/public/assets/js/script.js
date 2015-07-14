@@ -478,15 +478,17 @@
                         var $subList = $el.find('>ul>li');
                         if ($subList.length) {
                             subListValue = loopList($subList);
+                            subListValue = subListValue.length ? subListValue : null;
                         }
                         break;
                     case 'List':
                         var $subLists = $el.find('>.list-tree');
-                        subListValue = [];
                         if ($subLists.length) {
+                            subListValue = [];
                             $subLists.each(function () {
                                 subListValue.push(loopList($(this).find('>li')));
                             });
+                            subListValue = subListValue.length ? subListValue : null;
                         }
                         break;
                     default:
@@ -547,7 +549,6 @@
                         str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
                             str.push('<strong class="text">' + (v.key || '') + '</strong>');
                             str.push('<span class="text">' + (v.remark || '') + '</span>');
-                            str.push('<span class="text">' + (v.metadata || '') + '</span>');
                             if (v.metadata === 'String'){
                                 str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + (subNode || '') + '">');
                             } else if (v.metadata === 'Number') {
@@ -698,11 +699,18 @@
                     var $caseElm = $cases.eq(i);
                     var $statusElm = $caseElm.find('.js-status');
                     var $detailElm = $caseElm.find('.js-detail');
+
                     $caseElm.addClass('warning');
                     $statusElm.text('发送中...');
 
                     if (caseObj) {
-                        $.extend(caseObj.req, {
+                        var req = caseObj.req;
+                        var alliance = req.alliance;
+                        if (!alliance || !alliance.sid || !alliance.ouid || !alliance.aid) {
+                            delete req.alliance;
+                        }
+
+                        $.extend(req, {
                             contentType: 'json',
                             head: {
                                 auth: auth || null,
@@ -715,7 +723,7 @@
                             }
                         });
 
-                        Ajax.post(url, caseObj.req, function (data) {
+                        Ajax.post(url, req, function (data) {
                             data = data || {};
                             delete data.head;
                             delete data.ResponseStatus;
