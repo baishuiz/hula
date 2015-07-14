@@ -6,6 +6,18 @@
     var Util = {
         // Internal recursive comparison function for `isEqual`.
         isEqual: function(a, b, aStack, bStack) {
+
+            // 如果case不写则默认通过
+            if (a === null) {
+                return true;
+            }
+
+            // trim String
+            if (typeof a === 'string' && typeof b === 'string') {
+                a = a.trim();
+                b = b.trim();
+            }
+
             // Save bytes in the minified (but not gzipped) version:
             var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
@@ -123,7 +135,8 @@
                 var keys = getKeys(a), key;
                 length = keys.length;
                 // Ensure that both objects contain the same number of properties before comparing deep equality.
-                if (getKeys(b).length !== length) return false;
+                // 因为存在null情况，此处不做长度校验
+                // if (getKeys(b).length !== length) return false;
                 while (length--) {
                     // Deep compare each member
                     key = keys[length];
@@ -495,13 +508,15 @@
                         break;
                 }
 
-                list.push({
-                    key: key,
-                    remark: remark,
-                    metadata: metadata,
-                    value: subListValue,
-                    val: val
-                });
+                if (val !== null || subListValue !== null) {
+                    list.push({
+                        key: key,
+                        remark: remark,
+                        metadata: metadata,
+                        value: subListValue,
+                        val: val
+                    });
+                }
             });
             return list;
         };
@@ -705,7 +720,7 @@
 
                     if (caseObj) {
                         var req = caseObj.req;
-                        var alliance = req.alliance;
+                        var alliance = req && req.alliance;
                         if (!alliance || !alliance.sid || !alliance.ouid || !alliance.aid) {
                             delete req.alliance;
                         }
