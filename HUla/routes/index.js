@@ -8,6 +8,8 @@ function use (routerConfig){
 use('./contract');
 use('./service');
 use('./case');
+use('./uploadfile');
+use('./upload');
 use('./restapi/service');
 use('./restapi/contract');
 use('./restapi/case');
