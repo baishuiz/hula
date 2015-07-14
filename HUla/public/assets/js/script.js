@@ -193,6 +193,10 @@
     * Ajax
     */
     var Ajax = (function () {
+        $.ajaxSetup({
+            timeout: 30000
+        });
+
         var successHandler = function (data) {
             data = data || {};
             return data;
