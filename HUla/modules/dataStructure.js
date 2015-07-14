@@ -9,7 +9,8 @@ var dataType = utility.enumCreater([
        'Dynamic',
        'List',
        'Boolean',
-       'DateTime'
+       'DateTime',
+       'Enum'
 ]);
 
 /*
@@ -55,6 +56,7 @@ function Cell(lineData, index){
 		case type == dataType.Boolean:
 			jstype = "Boolean";
 			break;
+    case type == dataType.Enum:
 		case type == dataType.Price:
 		case type.indexOf(dataType.Int)>=0:
 			jstype = "Number";

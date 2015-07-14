@@ -1,7 +1,8 @@
 var dataStructure = require('./dataStructure');
 var service = require('./service');
 var contract = require('./contract');
-
+var msg = ''; //提示返回信息
+var count = 0; //计数器
 var dataHelp = {
     parse : function(sheet){
       var name = sheet.name;
@@ -16,7 +17,7 @@ var dataHelp = {
         servername = res[2];
       }
       var rows = sheet.data,
-          startIndex = 1, 
+          startIndex = 1,
           requestCount = 2,
           endIndex = rows.length;
       //没有request，格式不对，直接退出
@@ -25,14 +26,14 @@ var dataHelp = {
       }
       //找到response 开始的行数
       for(; requestCount<endIndex; requestCount++){
-        if(rows[requestCount][0]){            
+        if(rows[requestCount][0]){
           break;
         }
       }
-      
-      var request = dataStructure(sheet.data, startIndex, requestCount);      
+
+      var request = dataStructure(sheet.data, startIndex, requestCount);
       var response = dataStructure(sheet.data, requestCount+1, endIndex);
-      
+
       return {
         serverno : serverno,
         servername: servername,
@@ -41,42 +42,52 @@ var dataHelp = {
       }
     },
 
-    save : function(data){      
+    save : function(data){
       service.create({name:data.servername, NO: data.serverno, url: data.serverno},
         function(err, res){
           if(err){
             console.log(err);
-            console.log("创建service:"+data.serverno+"失败");
+            msg += "创建service:"+data.serverno+"失败" + "\r\n";
+            count++;
             return;
           }
-          console.log("创建service:"+data.serverno+"成功")
+          msg += "创建service:"+data.serverno+"成功" + "\r\n";
           contract.create({
             srv_id : res,
             NO: data.serverno,
             req: data.req,
             res: data.res
           },function(err){
-            if(err){            
+            if(err){
               console.log(err);
-              console.log("创建contract:"+data.serverno+"失败");
+              msg += "创建contract:"+data.serverno+"失败" + "\r\n";
+              count++;
               return;
             }
-            console.log("创建contract:"+data.serverno+"成功");
-          });    
-        })
-      
-        // ToDo: save to db
+            msg += "创建contract:"+data.serverno+"成功" + "\r\n";
+            count++;
+          });
+        });
     }
 }
 
 
 // 导入契约
-module.exports = function (xlsObject){
+module.exports = function (xlsObject, callback){
+    var sheetcount = xlsObject.length;
     // 遍历 Sheet
-    xlsObject.forEach(function(sheet, index){   
+    xlsObject.forEach(function(sheet, index){
         var data = dataHelp.parse(sheet);
         if(data){
           dataHelp.save(data);
         }
-    });     
+    });
+
+    //while(true){
+      //console.log(msg);
+      //if(count >= sheetcount){
+        //callback && callback(msg);
+        //return;
+      //}
+    //}
 }
