@@ -1,8 +1,7 @@
 var dataStructure = require('./dataStructure');
 var service = require('./service');
 var contract = require('./contract');
-var msg = ''; //提示返回信息
-var count = 0; //计数器
+var msg = '';  //提示返回信息
 var dataHelp = {
     parse : function(sheet){
       var name = sheet.name;
@@ -42,47 +41,63 @@ var dataHelp = {
       }
     },
 
-    save : function(data){
-      service.create({name:data.servername, NO: data.serverno, url: data.serverno},
-        function(err, res){
-          if(err){
-            console.log(err);
-            msg += "创建service:"+data.serverno+"失败" + "\r\n";
-            count++;
-            return;
-          }
-          msg += "创建service:"+data.serverno+"成功" + "\r\n";
-          contract.create({
-            srv_id : res,
-            NO: data.serverno,
-            req: data.req,
-            res: data.res
-          },function(err){
+    save : function(data, callback){
+
+        service.create({name:data.servername, NO: data.serverno, url: data.serverno},
+          function(err, res){
             if(err){
-              console.log(err);
-              msg += "创建contract:"+data.serverno+"失败" + "\r\n";
-              count++;
+              //console.log(err);
+              msg = "创建service:"+data.serverno+"失败" + "\r\n";
+              //resolve(msg);
+              callback && callback(msg);
               return;
             }
-            msg += "创建contract:"+data.serverno+"成功" + "\r\n";
-            count++;
+            msg = "创建service:"+data.serverno+"成功" + "\r\n";
+            contract.create({
+              srv_id : res,
+              NO: data.serverno,
+              req: data.req,
+              res: data.res
+            },function(err){
+              if(err){
+                //console.log(err);
+                msg = "创建contract:"+data.serverno+"失败" + "\r\n";
+                //resolve(msg);
+                callback && callback(msg);
+                return;
+              }
+              msg = "创建contract:"+data.serverno+"成功" + "\r\n";
+              //resolve(msg);
+              callback && callback(msg);
+            });
           });
-        });
+
     }
 }
 
 
 // 导入契约
 module.exports = function (xlsObject, callback){
-    var sheetcount = xlsObject.length;
+    var result='';
     // 遍历 Sheet
     xlsObject.forEach(function(sheet, index){
+      console.log(index);
         var data = dataHelp.parse(sheet);
         if(data){
-          dataHelp.save(data);
+          var promise = new Promise(function(resolve, reject){
+            dataHelp.save(data,function(msg){
+              resolve(msg);
+            });
+          });
+          promise.then(function(value){
+            console.log(index, value);
+          },function(value){
+            console.log(index, value);
+          });
         }
     });
-
+    console.log('导入契约',result);
+    return result;
     //while(true){
       //console.log(msg);
       //if(count >= sheetcount){

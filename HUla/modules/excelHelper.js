@@ -7,8 +7,9 @@ module.exports = function(filePath, callBack ) {
     var xls  = parseExcel(filePath);
     //console.log(xls);
     //fs.writeFile("tttttttttt",JSON.stringify(xls))
-    var json = toContract(xls, callBack);
-    
+    var json = toContract(xls);
+    //callBack && callBack(json);
+    return json;
 }
 
 
