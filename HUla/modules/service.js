@@ -46,7 +46,7 @@ var create = function (doc, callback) {
                 callback && callback(error, null);
         } else {
             if (result && result.length) {
-                callback && callback({ stack: 'service name exist' }, null);
+                callback && callback({ stack: 'service NO. exist' }, null);
             } else {
                 serviceModel.create({ name: name, url: url, NO: NO }, function (error, service) {
                     callback && callback(error, service && service._id);
