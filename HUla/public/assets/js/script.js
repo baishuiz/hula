@@ -17,11 +17,14 @@
             return str;
         },
         // Internal recursive comparison function for `isEqual`.
-        isEqual: function(a, b, aStack, bStack) {
-
+        isEqual: function(a, b, postKey, aStack, bStack, errorStack) {
+            errorStack = errorStack || [];
             // 如果case不写则默认通过
             if (a === null) {
-                return true;
+                return {
+                    status: true,
+                    errorStack: errorStack
+                };
             }
 
             // trim String
@@ -71,15 +74,57 @@
 
             // Identical objects are equal. `0 === -0`, but they aren't identical.
             // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-            if (a === b) return a !== 0 || 1 / a === 1 / b;
+            if (a === b) {
+                var status = a !== 0 || 1 / a === 1 / b;
+                if (!status) {
+                    errorStack.push({
+                        key: postKey,
+                        aStack: aStack,
+                        bStack: bStack
+                    });
+                }
+                if (typeof postKey !== 'undefined') {
+                    return {
+                        status: status,
+                        errorStack: errorStack
+                    };
+                }
+            }
             // A strict comparison is necessary because `null == undefined`.
-            if (a == null || b == null) return a === b;
+            if (a == null || b == null) {
+                var status = a === b;
+                if (!status) {
+                    errorStack.push({
+                        key: postKey,
+                        aStack: aStack,
+                        bStack: bStack
+                    });
+                }
+                if (typeof postKey !== 'undefined') {
+                    return {
+                        status: status,
+                        errorStack: errorStack
+                    };
+                }
+            }
             // Unwrap any wrapped objects.
             // if (a instanceof _) a = a._wrapped;
             // if (b instanceof _) b = b._wrapped;
             // Compare `[[Class]]` names.
             var className = toString.call(a);
-            if (className !== toString.call(b)) return false;
+            if (className !== toString.call(b)) {
+                errorStack.push({
+                    key: postKey,
+                    aStack: aStack,
+                    bStack: bStack
+                });
+                if (typeof postKey !== 'undefined') {
+                    return {
+                        status: false,
+                        errorStack: errorStack
+                    };
+                }
+            }
             switch (className) {
                 // Strings, numbers, regular expressions, dates, and booleans are compared by value.
                 case '[object RegExp]':
@@ -87,24 +132,91 @@
                 case '[object String]':
                     // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
                     // equivalent to `new String("5")`.
-                    return '' + a === '' + b;
+                    var status = '' + a === '' + b;
+                    if (!status) {
+                        errorStack.push({
+                            key: postKey,
+                            aStack: aStack,
+                            bStack: bStack
+                        });
+                    }
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: status,
+                            errorStack: errorStack
+                        };
+                    }
                 case '[object Number]':
                     // `NaN`s are equivalent, but non-reflexive.
                     // Object(NaN) is equivalent to NaN
-                    if (+a !== +a) return +b !== +b;
+                    if (+a !== +a) {
+                        var status = +b !== +b;
+                        if (!status) {
+                            errorStack.push({
+                                key: postKey,
+                                aStack: aStack,
+                                bStack: bStack
+                            });
+                        }
+                        if (typeof postKey !== 'undefined') {
+                            return {
+                                status: status,
+                                errorStack: errorStack
+                            };
+                        }
+                    }
+
                     // An `egal` comparison is performed for other numeric values.
-                    return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+                    var status = +a === 0 ? 1 / +a === 1 / b : +a === +b;
+                    if (!status) {
+                        errorStack.push({
+                            key: postKey,
+                            aStack: aStack,
+                            bStack: bStack
+                        });
+                    }
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: status,
+                            errorStack: errorStack
+                        };
+                    }
                 case '[object Date]':
                 case '[object Boolean]':
                     // Coerce dates and booleans to numeric primitive values. Dates are compared by their
                     // millisecond representations. Note that invalid dates with millisecond representations
                     // of `NaN` are not equivalent.
-                    return +a === +b;
+                    var status = +a === +b;
+                    if (!status) {
+                        errorStack.push({
+                            key: postKey,
+                            aStack: aStack,
+                            bStack: bStack
+                        });
+                    }
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: status,
+                            errorStack: errorStack
+                        };
+                    }
             }
 
             var areArrays = className === '[object Array]';
             if (!areArrays) {
-                if (typeof a != 'object' || typeof b != 'object') return false;
+                if (typeof a != 'object' || typeof b != 'object') {
+                    errorStack.push({
+                        key: postKey,
+                        aStack: aStack,
+                        bStack: bStack
+                    });
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: false,
+                            errorStack: errorStack
+                        };
+                    }
+                }
 
                 // Objects with different constructors are not equivalent, but `Object`s or `Array`s
                 // from different frames are.
@@ -112,7 +224,17 @@
                 if (aCtor !== bCtor && !(isFunction(aCtor) && aCtor instanceof aCtor &&
                                                                  isFunction(bCtor) && bCtor instanceof bCtor)
                                                         && ('constructor' in a && 'constructor' in b)) {
-                    return false;
+                    errorStack.push({
+                        key: postKey,
+                        aStack: aStack,
+                        bStack: bStack
+                    });
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: false,
+                            errorStack: errorStack
+                        };
+                    }
                 }
             }
             // Assume equality for cyclic structures. The algorithm for detecting cyclic
@@ -126,7 +248,20 @@
             while (length--) {
                 // Linear search. Performance is inversely proportional to the number of
                 // unique nested structures.
-                if (aStack[length] === a) return bStack[length] === b;
+                if (aStack[length] === a) {
+                    var status = bStack[length] === b;
+                    !status && errorStack.push({
+                        key: postKey,
+                        aStack: aStack,
+                        bStack: bStack
+                    });
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: status,
+                            errorStack: errorStack
+                        };
+                    }
+                }
             }
 
             // Add the first object to the stack of traversed objects.
@@ -137,10 +272,31 @@
             if (areArrays) {
                 // Compare array lengths to determine if a deep comparison is necessary.
                 length = a.length;
-                if (length !== b.length) return false;
+                if (length !== b.length) {
+                    errorStack.push({
+                        key: postKey,
+                        aStack: aStack,
+                        bStack: bStack
+                    });
+                    if (typeof postKey !== 'undefined') {
+                        return {
+                            status: false,
+                            errorStack: errorStack
+                        };
+                    }
+                }
                 // Deep compare the contents, ignoring non-numeric properties.
                 while (length--) {
-                    if (!Util.isEqual(a[length], b[length], aStack, bStack)) return false;
+                    var isEqual = Util.isEqual(a[key], b[key], postKey, aStack, bStack, errorStack);
+                    if (!isEqual.status) {
+                        errorStack = isEqual.errorStack;
+                        errorStack.push({
+                            key: postKey,
+                            aStack: aStack,
+                            bStack: bStack
+                        });
+                        // return false;
+                    }
                 }
             } else {
                 // Deep compare objects.
@@ -152,13 +308,25 @@
                 while (length--) {
                     // Deep compare each member
                     key = keys[length];
-                    if (!(has(b, key) && Util.isEqual(a[key], b[key], aStack, bStack))) return false;
+                    var isEqual = Util.isEqual(a[key], b[key], key, aStack, bStack, errorStack);
+                    if (!(has(b, key) && isEqual.status)) {
+                        errorStack = isEqual.errorStack;
+                        errorStack.push({
+                            key: key,
+                            aStack: aStack,
+                            bStack: bStack
+                        });
+                        // return false;
+                    }
                 }
             }
             // Remove the first object from the stack of traversed objects.
             aStack.pop();
             bStack.pop();
-            return true;
+            return {
+                status: true,
+                errorStack: errorStack
+            };
         }
     };
 
@@ -771,15 +939,16 @@
                             delete data.ResponseStatus;
 
                             var isEqual = Util.isEqual(caseObj.res, data);
+                            var errorStrAry = _.uniq(_.compact(_.pluck(isEqual.errorStack, 'key')));
 
-                            if (isEqual) {
+                            if (!errorStrAry || !errorStrAry.length) {
                                 $caseElm.removeClass('warning').addClass('success');
                                 $statusElm.text('成功');
                                 $detailElm.text('');
                             } else {
                                 $caseElm.addClass('danger');
                                 $statusElm.text('失败');
-                                $detailElm.text(JSON.stringify(data));
+                                $detailElm.text(errorStrAry.join(', '));
                             }
                             sentReq(i + 1);
                         }, function (error) {
