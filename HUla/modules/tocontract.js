@@ -43,27 +43,31 @@ var dataHelp = {
     },
 
     save : function(data, callback){
-        // ToDo: save to db
-        service.create({name:data.servername, NO: data.serverno, url: data.serverno},
-          function(err, res){
-            if(err){
+      service.create({name:data.servername, NO: data.serverno, url: data.serverno},
+        function(err, res){
+          if(err){
+              //console.log(err);
+              msg = "创建service:"+data.serverno+"失败" + "\r\n";
               callback && callback(msg);
               return;
-    }
+            }
+            msg = "创建service:"+data.serverno+"成功" + "\r\n";
             contract.create({
               srv_id : res,
               NO: data.serverno,
-              req: data.req,
               res: data.res
             },function(err){
               if(err){
+                  //console.log(err);
+                  msg = "创建contract:"+data.serverno+"失败" + "\r\n";
+                  callback && callback(msg);
+                  return;
+                }
+                msg = "创建contract:"+data.serverno+"成功" + "\r\n";
                 callback && callback(msg);
-                return;
-}
-              callback && callback(msg);
             });
-          });
-
+        });
+      }
 }
 
 
@@ -74,24 +78,11 @@ module.exports = function (xlsObject, callback){
       console.log(index);
         var data = dataHelp.parse(sheet);
         if(data){
-          var promise = new Promise(function(resolve, reject){
             dataHelp.save(data,function(msg){
-    });     
-          });
-          promise.then(function(value){
-            console.log(index, value);
-          },function(value){
-            console.log(index, value);
-          });
+              //console.log(index, msg);
+            });
         }
     });
     console.log('导入契约',result);
     return result;
-    //while(true){
-      //console.log(msg);
-      //if(count >= sheetcount){
-        //callback && callback(msg);
-        //return;
-      //}
-    //}
 }
