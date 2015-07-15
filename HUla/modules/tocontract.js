@@ -2,6 +2,7 @@ var dataStructure = require('./dataStructure');
 var service = require('./service');
 var contract = require('./contract');
 var msg = '';  //提示返回信息
+var count = 0; //计数器
 var dataHelp = {
     parse : function(sheet){
       var name = sheet.name;
@@ -42,17 +43,13 @@ var dataHelp = {
     },
 
     save : function(data, callback){
-
+        // ToDo: save to db
         service.create({name:data.servername, NO: data.serverno, url: data.serverno},
           function(err, res){
             if(err){
-              //console.log(err);
-              msg = "创建service:"+data.serverno+"失败" + "\r\n";
-              //resolve(msg);
               callback && callback(msg);
               return;
-            }
-            msg = "创建service:"+data.serverno+"成功" + "\r\n";
+    }
             contract.create({
               srv_id : res,
               NO: data.serverno,
@@ -60,25 +57,18 @@ var dataHelp = {
               res: data.res
             },function(err){
               if(err){
-                //console.log(err);
-                msg = "创建contract:"+data.serverno+"失败" + "\r\n";
-                //resolve(msg);
                 callback && callback(msg);
                 return;
-              }
-              msg = "创建contract:"+data.serverno+"成功" + "\r\n";
-              //resolve(msg);
+}
               callback && callback(msg);
             });
           });
 
-    }
 }
 
 
 // 导入契约
 module.exports = function (xlsObject, callback){
-    var result='';
     // 遍历 Sheet
     xlsObject.forEach(function(sheet, index){
       console.log(index);
@@ -86,8 +76,7 @@ module.exports = function (xlsObject, callback){
         if(data){
           var promise = new Promise(function(resolve, reject){
             dataHelp.save(data,function(msg){
-              resolve(msg);
-            });
+    });     
           });
           promise.then(function(value){
             console.log(index, value);

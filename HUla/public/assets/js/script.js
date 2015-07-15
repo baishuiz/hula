@@ -4,6 +4,18 @@
     * Utility
     */
     var Util = {
+        convert: function (str) {
+            str = str || '';
+
+            str = str.replace(/\\?&/g, '&amp;');
+            str = str.replace(/\\?>/g, '&gt;');
+            str = str.replace(/\\?</g, '&lt;');
+            str = str.replace(/\\?"/g, '&quot;');
+            str = str.replace(/\\?'/g, '&#039;');
+            str = str.replace(/\\\\/g, '\\');
+
+            return str;
+        },
         // Internal recursive comparison function for `isEqual`.
         isEqual: function(a, b, aStack, bStack) {
 
@@ -181,6 +193,10 @@
     * Ajax
     */
     var Ajax = (function () {
+        $.ajaxSetup({
+            timeout: 30000
+        });
+
         var successHandler = function (data) {
             data = data || {};
             return data;
@@ -190,7 +206,7 @@
             error = error || {};
 
             return {
-                ack: 0,
+                ack: 1,
                 msg: error.status + ': ' + error.statusText
             }
         }
@@ -479,10 +495,17 @@
                         val = $.trim($inputWrap.find('.js-input').val()) || null;
                         break;
                     case 'Number':
-                        val = parseInt($.trim($inputWrap.find('.js-input').val()), 10) || null;
+                        var tmpNum = parseInt($.trim($inputWrap.find('.js-input').val()), 10);
+
+                        val = (typeof tmpNum === 'number' && !Number.isNaN(tmpNum)) ? tmpNum : null;
                         break;
                     case 'Boolean':
-                        val = $.trim($inputWrap.find('.js-boolean').val()) == 1;
+                        var boolStr = $.trim($inputWrap.find('.js-boolean').val());
+                        if (boolStr) {
+                            val = parseInt(boolStr, 10) === 1;
+                        } else {
+                            val = null;
+                        }
                         break;
                     case 'Array':
                         val = $.trim($inputWrap.find('.js-input').val()).split(',') || null;
@@ -499,7 +522,10 @@
                         if ($subLists.length) {
                             subListValue = [];
                             $subLists.each(function () {
-                                subListValue.push(loopList($(this).find('>li')));
+                                var tmpAry = loopList($(this).find('>li'));
+                                if (tmpAry.length) {
+                                    subListValue.push(tmpAry);
+                                }
                             });
                             subListValue = subListValue.length ? subListValue : null;
                         }
@@ -565,13 +591,14 @@
                             str.push('<strong class="text">' + (v.key || '') + '</strong>');
                             str.push('<span class="text">' + (v.remark || '') + '</span>');
                             if (v.metadata === 'String'){
-                                str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + (subNode || '') + '">');
+                                str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + Util.convert(subNode || '') + '">');
                             } else if (v.metadata === 'Number') {
-                                str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + (subNode || '') + '">');
+                                str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + ((typeof subNode === 'number' && !Number.isNaN(subNode)) ? subNode : null) + '">');
                             } else if (v.metadata === 'Boolean') {
                                 str.push('<select class="js-boolean">');
-                                    str.push('<option value="1" ' + ((subNode === 1) ? 'selected' : '') + '>True</option>');
-                                    str.push('<option value="0" ' + ((subNode === 0) ? 'selected' : '') + '>False</option>');
+                                    str.push('<option></option>');
+                                    str.push('<option value="1" ' + ((subNode === true) ? 'selected' : '') + '>True</option>');
+                                    str.push('<option value="0" ' + ((subNode === false) ? 'selected' : '') + '>False</option>');
                                 str.push('</select>');
                             } else if (v.metadata === 'Array') {
                                 str.push('<input type="text" class="js-input form-control" placeholder="Array" value="' + (subNode || []).join(',') + '">');
