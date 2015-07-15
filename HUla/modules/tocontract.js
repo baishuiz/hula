@@ -1,8 +1,6 @@
 var dataStructure = require('./dataStructure');
 var service = require('./service');
 var contract = require('./contract');
-var msg = '';  //提示返回信息
-var count = 0; //计数器
 var dataHelp = {
     parse : function(sheet){
       var name = sheet.name;
@@ -43,15 +41,20 @@ var dataHelp = {
     },
 
     save : function(data, callback){
+      var msg;
+      if(!data){
+        callback && callback(msg);
+        return;
+      }
       service.create({name:data.servername, NO: data.serverno, url: data.serverno},
         function(err, res){
           if(err){
               //console.log(err);
-              msg = "创建service:"+data.serverno+"失败" + "\r\n";
+              msg = { text: "创建service:"+data.serverno+"失败", ack:1 };
               callback && callback(msg);
               return;
             }
-            msg = "创建service:"+data.serverno+"成功" + "\r\n";
+            msg = { text: "创建service:"+data.serverno+"成功", ack:0};
             contract.create({
               srv_id : res,
               NO: data.serverno,
@@ -59,11 +62,11 @@ var dataHelp = {
             },function(err){
               if(err){
                   //console.log(err);
-                  msg = "创建contract:"+data.serverno+"失败" + "\r\n";
+                  msg ={ text:"创建contract:"+data.serverno+"失败", ack:1};
                   callback && callback(msg);
                   return;
                 }
-                msg = "创建contract:"+data.serverno+"成功" + "\r\n";
+                msg = {text: "创建contract:"+data.serverno+"成功", ack:0};
                 callback && callback(msg);
             });
         });
@@ -71,18 +74,28 @@ var dataHelp = {
 }
 
 
-// 导入契约
-module.exports = function (xlsObject, callback){
-    // 遍历 Sheet
-    xlsObject.forEach(function(sheet, index){
-      console.log(index);
-        var data = dataHelp.parse(sheet);
-        if(data){
-            dataHelp.save(data,function(msg){
-              //console.log(index, msg);
-            });
+function iterate(datas,msg, callback){
+    var data = datas.shift();
+    dataHelp.save(data, function(result){
+        msg = msg || [];
+        msg.push(result);
+        if(datas.length){
+          iterate(datas, msg,callback);
+        }else{
+          callback && callback(msg);
         }
     });
-    console.log('导入契约',result);
-    return result;
+}
+
+// 导入契约
+module.exports = function (xlsObject, callback){
+    var datas = [];
+    // 遍历 Sheet
+    xlsObject.forEach(function(sheet, index){
+        var data = dataHelp.parse(sheet);
+        if(data){
+            datas.push(data);
+        }
+    });
+    iterate(datas, [], callback);
 }

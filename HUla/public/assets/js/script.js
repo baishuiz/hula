@@ -965,10 +965,31 @@
         })();
     };
 
+    /*
+    * upload page
+    */
+    var uploadAction = function(){
+      var $uploadPage = $('.upload-page');
+      var uploadframe = $uploadPage.find("#uploadTrg");
+      var uploadform = $uploadPage.find("#uploadForm");
+      var submitbtn = $uploadPage.find('#submit');
+
+      submitbtn.on('click', function(){
+        UI.showLoading();
+        uploadForm.submit();
+      });
+      uploadframe.on('load', function(){
+        var html = uploadframe && uploadframe[0] && uploadframe[0].contentDocument.body.innerHTML;
+        $uploadPage.html(html);
+        UI.hideLoading();
+      });
+    };
+
     $(document).on('ready', function () {
         serviceAction();
         contractAction();
         caseAction();
+        uploadAction();
     });
 
 })();

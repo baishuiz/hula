@@ -1,6 +1,6 @@
-extends layout
-
-block content
-    .upload-page
-        h1.page-header
-             上传契约完成
+h3 上传完成
+table.table.table-striped.service-table.js-service-table
+  - each r in result
+    tr(class= r.ack==0 ? 'success' : 'danger')
+      td= r.text
+      td= r.ack == 0 ? '成功' : '失败'

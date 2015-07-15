@@ -3,11 +3,8 @@ extends layout
 block content
     .upload-page
         h1.page-header
-             上传契约
+             p 上传契约
         iframe(id="uploadTrg", name="uploadTrg", height="0", width="0", frameborder="0", scrolling="yes")
-        form(action="upload", method="post", enctype = "multipart/form-data", target="uploadTrg")
+        form(action="uploadhandler", id="uploadForm" method="post", enctype = "multipart/form-data", target="uploadTrg")
           input(type="file", name="contractfile")
           input.btn.btn-sm.btn-success(type="submit", value="上传")
-        - if(result)
-            p 上传完成
-            p= result
