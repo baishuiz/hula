@@ -92,20 +92,20 @@ var dataHelp = {
     },
 
     save : function(data, callback){
-      var msg;
+      var msg = [];
       if(!data){
         callback && callback(msg);
         return;
       }
-      service.create({name:data.servername, NO: data.serverno, url: data.serverresturl},
+      service.create({name:data.servername, NO: data.serverno, url: data.serverresturl || data.serverno},
         function(err, res){
           if(err){
               //console.log(err);
-              msg = { text: "创建service:"+data.serverno+"失败", ack:1 };
+              msg.push({ text: "创建service:"+data.serverno+"失败", ack:1, errmsg: err.stack });
               callback && callback(msg);
               return;
             }
-            msg = { text: "创建service:"+data.serverno+"成功", ack:0};
+            msg.push({ text: "创建service:"+data.serverno+"成功", ack:0});
             contract.create({
               srv_id : res,
               NO: data.serverno,
@@ -113,11 +113,11 @@ var dataHelp = {
             },function(err){
               if(err){
                   //console.log(err);
-                  msg ={ text:"创建contract:"+data.serverno+"失败", ack:1};
+                  msg.push({ text:"创建contract:"+data.serverno+"失败", ack:1, errmsg: err.stack});
                   callback && callback(msg);
                   return;
-                }
-                msg = {text: "创建contract:"+data.serverno+"成功", ack:0};
+                };
+                msg.push({text: "创建contract:"+data.serverno+"成功", ack:0});
                 callback && callback(msg);
             });
         });
@@ -129,7 +129,7 @@ function iterate(datas,msg, callback){
     var data = datas.shift();
     dataHelp.save(data, function(result){
         msg = msg || [];
-        msg.push(result);
+        msg = msg.concat(result);
         if(datas.length){
           iterate(datas, msg,callback);
         }else{

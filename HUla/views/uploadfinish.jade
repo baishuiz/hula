@@ -4,3 +4,4 @@ table.table.table-striped.service-table.js-service-table
     tr(class= r.ack==0 ? 'success' : 'danger')
       td= r.text
       td= r.ack == 0 ? '成功' : '失败'
+      td= r.errmsg
