@@ -636,6 +636,7 @@
         $casePage.on('click', '.js-add', function (e) {
             var $curSubTree = $(this).closest('.input-wrap').next('.list-tree').first();
             var $appendTree = $curSubTree.clone();
+            $appendTree.find('.js-delete').show();
             $appendTree.find('.js-input').val('');
             $curSubTree.after($appendTree);
         });
@@ -740,6 +741,9 @@
                 error.msg && UI.showError(error.msg);
             })
         });
+
+        // case editor
+        $casePage.find('li>.list-tree:eq(0) .js-delete').hide();
 
         //copy form template by melvin.ren
         var loop = function (ary, parentIsList, parentNode) {
@@ -882,7 +886,7 @@
 
         // Run Case
         (function () {
-            $caseResultPage = $('#case-result');
+            var $caseResultPage = $('#case-result');
             if ($caseResultPage.length) {
                 var $cases = $caseResultPage.find('.js-cases>tr');
                 $cases.find('.js-status, .js-detail').text('');

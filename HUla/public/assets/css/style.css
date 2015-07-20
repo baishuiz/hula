@@ -179,11 +179,11 @@ body {
 .case-table-wrapper .common-list ul {
     padding-left: 40px;
 }
-.case-table-wrapper .common-list ul.list-tree {
+.case-table-wrapper .common-list .list-tree {
     padding-left: 80px;
     overflow: hidden;
 }
-.case-table-wrapper .common-list ul.list-tree::before {
+.case-table-wrapper .common-list .list-tree::before {
     content: ' ';
     position: absolute;
     top: 17px;
@@ -192,7 +192,7 @@ body {
     height: 100%;
     background: #000;
 }
-.case-table-wrapper .common-list ul.list-tree::after {
+.case-table-wrapper .common-list .list-tree::after {
     content: ' ';
     position: absolute;
     bottom: 0;
@@ -201,16 +201,7 @@ body {
     height: 26px;
     background: #fff;
 }
-.case-table-wrapper .common-list li ul.list-tree:first-child .js-delete {
-    display: none;
-}
-.case-table-wrapper .common-list .line {
-
-}
-.case-table-wrapper .common-list .list-tree li::before {
-
-}
-.case-table-wrapper .common-list .list-tree>li:nth-child(1)>.line {
+.case-table-wrapper .common-list .list-tree>li:first-child>.line {
     position: absolute;
     width: 40px;
     height: 1px;
