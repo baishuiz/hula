@@ -104,12 +104,12 @@ var findByIdAndRemove = function (_id, options, callback) {
     });
 }
 
-var removeAll = function (ids, options, callback) {
-    if (!ids || !ids.length) {
-        callback && callback({ stack: 'unavailable ids' });
+var remove = function (conditions, callback) {
+    if (_.isEmpty(conditions)) {
+        callback && callback({ stack: 'unavailable params' });
         return;
     }
-    caseModel.remove({ _id: { $in: ids }}, function (error, result){
+    caseModel.remove(conditions, function (error, result){
         callback && callback(error, result);
     });
 }
@@ -120,5 +120,5 @@ module.exports = {
     create: create,
     findOneAndUpdate: findOneAndUpdate,
     findByIdAndRemove: findByIdAndRemove,
-    removeAll: removeAll
+    remove: remove
 };

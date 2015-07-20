@@ -1,6 +1,7 @@
 var dbLibs = require('../db/connection');
 var mongoose = dbLibs.mongoose;
 var db = dbLibs.db;
+var contractModel = require('./contract');
 
 var serviceSchema = new mongoose.Schema({
     NO: {type: String},
@@ -88,28 +89,39 @@ var findOneAndUpdate = function (query, doc, options, callback) {
     });
 }
 
+var removeContract = function (conditions) {
+    contractModel.remove(conditions);
+}
+
 var findByIdAndRemove = function (_id, options, callback) {
     if (!_id || !isValidId(_id)) {
         callback && callback({ stack: 'unavailable id' });
         return;
     }
 
-    // TODO 删除时同时删除 contract 和 case ？
     serviceModel.findByIdAndRemove(_id, options, function (error) {
+        _id && removeContract({ srv_id: _id });
         callback && callback(error);
     });
 }
 
-var removeAll = function (ids, options, callback) {
-    if (!ids || !ids.length) {
-        callback && callback({ stack: 'unavailable ids' });
+var remove = function (conditions, callback) {
+    if (_.isEmpty(conditions)) {
+        callback && callback({ stack: 'unavailable params' });
         return;
     }
 
-    // TODO 删除时同时删除 contract 和 case ？
-    serviceModel.remove({ _id: { $in: ids }}, function (error, result){
-        callback && callback(error, result);
+    find(conditions, { _id: 1 }, function (error, result) {
+        serviceModel.remove(conditions, function (error, result){
+            callback && callback(error, result);
+        });
+
+        var ids = _.compact(_.pluck(result, '_id'));
+        if (ids && ids.length) {
+            removeContract({ srv_id: { $in: ids }});
+        }
     });
+
 }
 
 module.exports = {
@@ -118,5 +130,5 @@ module.exports = {
     create: create,
     findOneAndUpdate: findOneAndUpdate,
     findByIdAndRemove: findByIdAndRemove,
-    removeAll: removeAll
+    remove: remove
 };
