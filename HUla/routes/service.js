@@ -4,7 +4,7 @@ var serviceModel = require('../modules/service');
 
 router.get('/services', function(req, res, next) {
     serviceModel.find(null, null, function(error, result){
-        res.render('service', { title: '服务', services: result, nav: 'service', errorMsg: error && error.msg });
+        res.render('service', { title: '服务', services: result || [], nav: 'service', errorMsg: error && error.msg });
     });
 });
 
