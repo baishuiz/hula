@@ -5,14 +5,14 @@ var router = express.Router();
 
 
 router.get('/upload', function(req, res, next){
-  res.render('upload');
+  res.render('upload',{nav: 'upload'});
 });
 
 router.post('/uploadhandler', function(req, res, next){
   var path = req.files.contractfile.path;
 
   excel(path, function(result){
-    res.render('uploadfinish',{result: result});
+    res.render('uploadfinish',{result: result, nav: 'upload'});
   });
 });
 
