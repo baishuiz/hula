@@ -5,7 +5,7 @@
     */
     var Util = {
         convert: function (str) {
-            str = str || '';
+            str = str && str.toString && str.toString() || '';
 
             str = str.replace(/\\?&/g, '&amp;');
             str = str.replace(/\\?>/g, '&gt;');
