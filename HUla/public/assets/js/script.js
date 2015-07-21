@@ -743,7 +743,13 @@
         });
 
         // case editor
-        $casePage.find('li>.list-tree:eq(0) .js-delete').hide();
+        $casePage.find('li>.list-tree').each(function() {
+            var $target = $(this);
+            var index = $target.index($target.parent().children('.list-tree'));
+            if (index === 0) {
+                $target.find('.js-delete').hide();
+            }
+        });
 
         //copy form template by melvin.ren
         var loop = function (ary, parentIsList, parentNode) {
