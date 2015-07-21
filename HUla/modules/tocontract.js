@@ -109,6 +109,7 @@ var dataHelp = {
             contract.create({
               srv_id : res,
               NO: data.serverno,
+              req: data.req,
               res: data.res
             },function(err){
               if(err){
