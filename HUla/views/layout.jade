@@ -3,29 +3,34 @@ html
   head
     title= title
     link(rel='stylesheet', href='/assets/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/assets/css/bootstrap-theme.css')
+    //link(rel='stylesheet', href='/assets/css/bootstrap-theme.css')
+    link(rel='stylesheet', href='/assets/css/uniform.default.min.css')
     link(rel='stylesheet', href='/assets/css/style.css')
 
   body
-    nav.navbar.navbar-inverse.navbar-fixed-top
-        .container-fluid
-            .navbar-header
+    nav.nav-mod.fixed-left
+        .c
+            .navinner
                 button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
                     span.sr-only Toggle navigation
                     span.icon-bar
                     span.icon-bar
                     span.icon-bar
-                span.navbar-brand 接口自动化测试平台
-            #navbar.navbar-collapse.collapse
-                ul.nav.navbar-nav.navbar-left
+                span.navlogo 接口自动化测试平台
+            #navbar.navmenu
+                ul.nav-items
                     li(class=nav === 'service' ? 'active' : '')
-                        a(href='/services') 服务
+                        a(href='/services') 
+                            span.icon-database 
+                            服务
                     li(class=nav === 'upload' ? 'active' : '')
-                        a(href='/upload') 上传契约
+                        a(href='/upload') 
+                            span.icon-upload 
+                            上传契约
 
 
-    .container-fluid(role="main")
-        .main
+    .wrap(role="main")
+        .wrapper
             include ./parts/toast.jade
             block content
 

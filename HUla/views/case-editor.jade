@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .case-page(data-id=id, data-srv-id=srv_id, data-no=NO, data-con-id=con_id)
+    .case-page.pages(data-id=id, data-srv-id=srv_id, data-no=NO, data-con-id=con_id)
         input(type="hidden", id="js_con_req", value=JSON.stringify(con_req))
         input(type="hidden", id="js_con_res", value=JSON.stringify(con_res))
         h1.page-header
@@ -75,29 +75,31 @@ block content
         -   }
 
         h3.sub-header Name
-        .case-table-wrapper
+        .case-table-wrapper.c-bd
             input.form-control.js-name(type='text', placeholder='Name', value=name)
 
         h3.sub-header Request
-        .case-table-wrapper
+        .case-table-wrapper.c-bd
             ul.common-list.js-req
                 != loop(con_req, false, case_req)
-        strong 直接输入字符串Request对象
-        textarea.form-control(id="js_caseReqString", rows=2, style="width:99%")
+        .c-bd
+            strong 直接输入字符串Request对象
+            textarea.form-control(id="js_caseReqString", rows=2, style="width:99%")
 
         h3.sub-header Response
-        .case-table-wrapper
+        .case-table-wrapper.c-bd
             ul.common-list.js-res
                 != loop(con_res, false, case_res)
-        strong 直接输入字符串Response对象
-        textarea.form-control(id="js_caseResString", rows=2, style="width:99%")
+        .c-bd
+            strong 直接输入字符串Response对象
+            textarea.form-control(id="js_caseResString", rows=2, style="width:99%")
 
     script#tpl_single(type='text/template')
         li
             .input-wrap
                 input.form-control.js-key(type='text', placeholder='key')
                 input.form-control.js-remark(type='text', placeholder='remark')
-                select.js-metadata
+                select.form-control.js-metadata
                   option(value='String') String
                   option(value='Number') Number
                   option(value='Boolean') Boolean
@@ -113,7 +115,7 @@ block content
                 .input-wrap
                     input.form-control.js-key(type='text', placeholder='key')
                     input.form-control.js-remark(type='text', placeholder='remark')
-                    select.js-metadata
+                    select.form-control.js-metadata
                         option(value='String') String
                         option(value='Number') Number
                         option(value='Boolean') Boolean

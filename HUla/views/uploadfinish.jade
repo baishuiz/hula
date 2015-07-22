@@ -1,7 +1,10 @@
-h3 上传完成
-table.table.table-striped.service-table.js-service-table
-  - each r in result
-    tr(class= r.ack==0 ? 'success' : 'danger')
-      td= r.text
-      td= r.ack == 0 ? '成功' : '失败'
-      td= r.errmsg
+block content
+.contract-page.pages
+  h1.page-head 上传完成
+  .c-bd
+    table.table.table-striped.service-table.js-service-table
+     - each r in result
+      tr(class= r.ack==0 ? 'success' : 'danger')
+        td= r.text
+        td= r.ack == 0 ? '成功' : '失败'
+        td= r.errmsg
