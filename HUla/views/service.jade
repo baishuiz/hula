@@ -1,14 +1,16 @@
 extends layout
 
 block content
-    .service-page
-        h1.page-header
+    .service-page.pages
+        h1.page-head
             = title
             span.btn-group
-                a.btn.btn-sm.btn-success.js-add-service(href='#') 添加
+                a.btn.btn-sm.btn-primary.ml10.js-add-service(href='#') 
+                    span.icon-plus.fn18
+                    添加
             
-        .panel.panel-default
-            table.table.table-striped.service-table.js-service-table
+        .card.c-bd
+            table.table.table-full.js-service-table
                 thead
                     tr(data-id="")
                         th.align-center(width=20) #
@@ -20,7 +22,9 @@ block content
                     - each service in services
                         tr(data-id=(service._id && service._id.toString()))
                             td.align-center
-                                input.js-check(type='checkbox')
+                                .checker
+                                    span.checked
+                                        input.js-check(type='checkbox')
                             td
                                 input.form-control.js-input-name(type='text', value=service.name, disabled='disabled', data-value=service.name)
                             td
@@ -30,16 +34,16 @@ block content
                             td.action-group
                                 a.btn.btn-sm.btn-default.js-edit(href='#') 编辑
                                 a.btn.btn-sm.btn-success.js-save(href='#', style='display: none') 确认
-                                a.btn.btn-sm.btn-default.js-cancel(href='#', style='display: none') 取消
+                                a.btn.btn-sm.btn-info.js-cancel(href='#', style='display: none') 取消
                                 a.btn.btn-sm.btn-danger.js-delete(href='/service/delete/' + service._id) 删除
-                                a.btn.btn-sm.btn-default.js-contract(href='/contract/?srv_id=' + service._id) 契约
+                                a.btn.btn-sm.btn-info.js-contract(href='/contract/?srv_id=' + service._id) 契约
                     - else
                         tr.js-empty
-                            td.align-center(colspan=4) 暂无服务
+                            td.align-center(colspan=5) 暂无服务
                     - if (services && services.length) {
                         tr
                             td
-                                button.btn.btn-sm.btn-default.js-select-all 全选
+                                button.btn.btn-sm.btn-danger.js-select-all 全选
                             td(colspan=4)
                                 button.btn.btn-sm.btn-danger.js-delete-all 删除选中
                     - }

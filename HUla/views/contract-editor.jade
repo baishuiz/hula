@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .contract-page(data-id=id, data-srv-id=srv_id, data-no=NO)
+    .contract-page.pages(data-id=id, data-srv-id=srv_id, data-no=NO)
         h1.page-header
             = title
             span.btn-group
@@ -20,7 +20,7 @@ block content
         -                   str.push('<div class="input-wrap">')
         -                       str.push('<input type="text" placeholder="key" class="js-key form-control" value="' + (v.key || '') +'">');
         -                       str.push('<input type="text" placeholder="remark" class="js-remark form-control" value="' + (v.remark || '') + '">');
-        -                       str.push('<select class="js-metadata">');
+        -                       str.push('<select class="form-control js-metadata">');
         -                           str.push('<option value="String" ' + (v.metadata === 'String' ?  'selected' : '') + '>String</option>');
         -                           str.push('<option value="Number" ' + (v.metadata === 'Number' ?  'selected' : '') + '>Number</option>');
         -                           str.push('<option value="Boolean" ' + (v.metadata === 'Boolean' ?  'selected' : '') + '>Boolean</option>');
@@ -57,7 +57,7 @@ block content
             .input-wrap
                 input.form-control.js-key(type='text', placeholder='key')
                 input.form-control.js-remark(type='text', placeholder='remark')
-                select.js-metadata
+                select.form-control.js-metadata
                   option(value='String') String
                   option(value='Number') Number
                   option(value='Boolean') Boolean
@@ -73,7 +73,7 @@ block content
                 .input-wrap
                     input.form-control.js-key(type='text', placeholder='key')
                     input.form-control.js-remark(type='text', placeholder='remark')
-                    select.js-metadata
+                    select.form-control.js-metadata
                         option(value='String') String
                         option(value='Number') Number
                         option(value='Boolean') Boolean

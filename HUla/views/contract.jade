@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .contract-page
+    .contract-page.pages
         h1.page-header= title
             span.btn-group
                 a.btn.btn-sm.btn-default(href='/services', rel='noreferrer') 返回
@@ -10,7 +10,7 @@ block content
             h3.sub-header
                 | 服务： #{NO}
 
-        .panel.panel-default
+        .card.c-bd
             table.table.table-striped
                 thead
                     tr(data-id="")
@@ -27,7 +27,7 @@ block content
                             td.action-group
                                 a.btn.btn-sm.btn-default(href='/contract/' + contract._id + '?srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 编辑
                                 a.btn.btn-sm.btn-danger(href='/contract/delete/' + contract._id) 删除
-                                a.btn.btn-sm.btn-default(href='/case/?con_id=' + contract._id + '&srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 用例
+                                a.btn.btn-sm.btn-info(href='/case/?con_id=' + contract._id + '&srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 用例
                     - else
                         tr.js-empty
                             td.align-center(colspan=3) 暂无契约
