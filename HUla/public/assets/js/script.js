@@ -652,8 +652,8 @@
             $serviceTable.find('.js-check').prop('checked', true);
         });
 
-        // run all case
-        $serviceTable.on('click', '.js-run-all', function (e) {
+        // delete all
+        $serviceTable.on('click', '.js-delete-all', function (e) {
             e.preventDefault();
             var $selectedCB = $serviceTable.find('.js-check:checked');
             var ids = [];
@@ -663,9 +663,11 @@
             });
 
             if (ids.length && confirm('将同时删除对应的契约及用例，确认删除？')) {
+                UI.showLoading();
                 Ajax.delete('/restapi/service', { ids: ids }, function (data) {
                     location.reload();
                 }, function (error) {
+                    UI.hideLoading();
                     UI.showError(error.msg || '网络错误');
                 });
             } else {
