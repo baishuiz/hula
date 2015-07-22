@@ -1102,7 +1102,7 @@
                             } else {
                                 $caseElm.addClass('danger');
                                 $statusElm.text('失败');
-                                $detailElm.text(errorStrAry.join(', '));
+                                $detailElm.text((data.msg ? (data.msg + '  ') : '') + errorStrAry.join(', '));
                             }
                             sentReq(i + 1);
                         }, function (error) {
