@@ -289,4 +289,4 @@ a:active {text-decoration: none;}
 input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 .form-control[disabled], fieldset[disabled] .form-control { cursor: not-allowed; }
 .form-control { background: #fff; border-radius: 0; border: 1px solid #dce1e4; box-shadow: none !important; font-size: 13px; padding: 4px 10px !important; -webkit-transition: all .2s ease-in-out; -moz-transition: all .2s ease-in-out; -o-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
-.form-control[disabled] { background: #f7f7f7; border-color: #d2d7db; }
+.form-control[disabled] { background: #f7f7f7; border-color: #d2d7db;}
