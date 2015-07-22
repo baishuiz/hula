@@ -11,6 +11,7 @@ block content
             table.table.table-striped.service-table.js-service-table
                 thead
                     tr(data-id="")
+                        th.align-center(width=20) #
                         th Name
                         th URL
                         th NO.
@@ -18,6 +19,8 @@ block content
                 tbody
                     - each service in services
                         tr(data-id=(service._id && service._id.toString()))
+                            td.align-center
+                                input.js-check(type='checkbox')
                             td
                                 input.form-control.js-input-name(type='text', value=service.name, disabled='disabled', data-value=service.name)
                             td
@@ -33,6 +36,13 @@ block content
                     - else
                         tr.js-empty
                             td.align-center(colspan=4) 暂无服务
+                    - if (services && services.length) {
+                        tr
+                            td
+                                button.btn.btn-sm.btn-default.js-select-all 全选
+                            td(colspan=4)
+                                button.btn.btn-sm.btn-success.js-run-all 执行选中
+                    - }
 
             script.js-service-tpl-item(type='text/template')
                 tr(data-id='')

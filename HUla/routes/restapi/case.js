@@ -37,14 +37,14 @@ router.put('/restapi/case/:_id', function(req, res, next) {
     var param = req.body || {};
     param.req = caseFormat.viewToDb(param.req);
     param.res = caseFormat.viewToDb(param.res);
-    
+
     caseModel.findOneAndUpdate({ _id: req.params._id }, req.body, null, function (error, result) {
         res.json(resHandler(null, error));
     });
 });
 
 router.delete('/restapi/case/', function(req, res, next) {
-    caseModel.removeAll(req.body.ids, null, function (error, result) {
+    caseModel.remove({ _id : { $in: req.body.ids }}, function (error, result) {
         res.json(resHandler(null, error));
     });
 });

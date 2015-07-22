@@ -521,10 +521,32 @@
                 });
         }
 
+        var deleteAction = function (url, data, successFn, errorFn) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                    data = successHandler(data);
+                    if (data.ack) {
+                        errorFn && errorFn(data);
+                    } else {
+                        successFn && successFn(data);
+                    }
+                })
+                .fail(function (error) {
+                    error = errorHandler(error);
+                    errorFn && errorFn(error);
+                });
+        }
+
         return {
             get: get,
             put: put,
-            post: post
+            post: post,
+            delete: deleteAction
         };
     })();
 
@@ -617,6 +639,38 @@
             });
             $root.find('.js-save').hide();
             $root.find('.js-edit, .js-delete, .js-contract').show();
+        });
+
+        // 删除
+        $serviceTable.on('click', '.js-delete', function (e) {
+            return confirm('将同时删除对应的契约及用例，确认删除？');
+        });
+
+        // select all
+        $serviceTable.on('click', '.js-select-all', function (e) {
+            e.preventDefault();
+            $serviceTable.find('.js-check').prop('checked', true);
+        });
+
+        // run all case
+        $serviceTable.on('click', '.js-run-all', function (e) {
+            e.preventDefault();
+            var $selectedCB = $serviceTable.find('.js-check:checked');
+            var ids = [];
+            $selectedCB.each(function () {
+                var id = $(this).closest('tr').attr('data-id');
+                id && ids.push(id);
+            });
+
+            if (ids.length && confirm('将同时删除对应的契约及用例，确认删除？')) {
+                Ajax.delete('/restapi/service', { ids: ids }, function (data) {
+                    location.reload();
+                }, function (error) {
+                    UI.showError(error.msg || '网络错误');
+                });
+            } else {
+                return false;
+            }
         });
     };
 

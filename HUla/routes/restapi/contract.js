@@ -49,7 +49,7 @@ router.put('/restapi/contract/:_id', function(req, res, next) {
 });
 
 router.delete('/restapi/contract/', function(req, res, next) {
-    contractModel.removeAll(req.body.ids, null, function (error, result) {
+    contractModel.remove({ _id : { $in: req.body.ids }}, function (error, result) {
         res.json(resHandler(null, error));
     });
 });

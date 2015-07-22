@@ -31,7 +31,7 @@ router.put('/restapi/service/:_id', function(req, res, next) {
 });
 
 router.delete('/restapi/service/', function(req, res, next) {
-    serviceModel.removeAll(req.body.ids, null, function (error, result) {
+    serviceModel.remove({ _id : { $in: req.body.ids }}, function (error, result) {
         res.json(resHandler(null, error));
     });
 });
