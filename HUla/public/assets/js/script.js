@@ -566,7 +566,9 @@
             }
 
             var $tplItem = $servicePage.find('.js-service-tpl-item');
-            $serviceTable.prepend($tplItem.html());
+            var $newElm = $($tplItem.html());
+            $serviceTable.prepend($newElm);
+            $newElm.find('input[type="text"]:first').focus();
         });
 
         // 编辑
