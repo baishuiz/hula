@@ -23,7 +23,7 @@ block content
                         tr(data-id=(service._id && service._id.toString()))
                             td.align-center
                                 .checker
-                                    span.checked
+                                    span
                                         input.js-check(type='checkbox')
                             td
                                 input.form-control.js-input-name(type='text', value=service.name, disabled='disabled', data-value=service.name)
@@ -50,6 +50,10 @@ block content
 
             script.js-service-tpl-item(type='text/template')
                 tr(data-id='')
+                    td.align-center
+                        .checker
+                            span
+                                input.js-check(type='checkbox')
                     td
                         input.form-control.js-input-name(type='text', data-value='')
                     td

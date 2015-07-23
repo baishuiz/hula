@@ -566,7 +566,9 @@
             }
 
             var $tplItem = $servicePage.find('.js-service-tpl-item');
-            $serviceTable.append($($tplItem.html()));
+            var $newElm = $($tplItem.html());
+            $serviceTable.prepend($newElm);
+            $newElm.find('input[type="text"]:first').focus();
         });
 
         // 编辑
@@ -649,7 +651,7 @@
         // select all
         $serviceTable.on('click', '.js-select-all', function (e) {
             e.preventDefault();
-            $serviceTable.find('.js-check').prop('checked', true);
+            $serviceTable.find('.js-check').trigger('click');
         });
 
         // delete all
@@ -990,7 +992,7 @@
         // select all
         $casePage.on('click', '.js-select-all', function (e) {
             e.preventDefault();
-            $casePage.find('.js-check').prop('checked', true);
+            $casePage.find('.js-check').trigger('click');
         });
 
         $caseRunForm = $('#case-run-form');
@@ -1170,6 +1172,18 @@
         contractAction();
         caseAction();
         uploadAction();
+
+        $(document.body).on('change', '.js-check', function () {
+            var $target = $(this);
+            var checked = $target.prop('checked');
+
+            if (checked) {
+                $target.parent().addClass('checked');
+            } else {
+                $target.parent().removeClass('checked');
+            }
+        });
+
     });
 
 })();

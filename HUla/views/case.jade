@@ -33,7 +33,9 @@ block content
                             - var tmp_NO = NO || caseObj.NO || ''
                             tr(data-id=(caseObj._id && caseObj._id.toString()))
                                 td.align-center
-                                    input.js-check(type='checkbox')
+                                    .checker
+                                        span
+                                            input.js-check(type='checkbox')
                                 td= caseObj.name
                                 td.action-group
                                     a.btn.btn-sm.btn-default(href='/case/' + caseObj._id + '?con_id=' + con_id + '&srv_id=' + tmp_srv_id + '&no=' + tmp_NO) 编辑
