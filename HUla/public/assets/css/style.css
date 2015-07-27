@@ -111,14 +111,14 @@ body {
 }
 .common-list .form-control {
     display: inline-block;
-    width: 220px;
+    width: 180px;
     margin-right: 10px;
 }
 .common-list select.form-control {
    width: 100px;
 }
 .common-list .input-wrap {
-    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 .common-list .input-wrap select {
     margin-left: 10px;
@@ -304,7 +304,8 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 
 /*star folder-ui*/
 .folder-ui {padding-left: 20px;}
-.folder-ui .input-wrap + ul:not(.list-tree) {margin-left: 30px;}
+.folder-ui .input-wrap .form-control {border-radius: 5px;background-color: #fefefe}
+.folder-ui .input-wrap + ul:not(.list-tree) {margin-left: 40px;padding-top: 10px;margin-top: -10px;}
 .folder-ui .input-wrap + ul,.folder-ui .input-wrap + ul .input-wrap{position: relative;}
 .folder-ui .input-wrap + ul:not(.list-tree):before{position: absolute;left:-30px;top:0;content:"";height: 100%;border-left:1px dashed #22baa0;}
 .folder-ui .input-wrap + ul .input-wrap:after {position: absolute;left:-30px;top:17px;content:"";width: 30px;height: 1px;border-top:1px dashed #22baa0;}
