@@ -112,7 +112,7 @@ body {
 .common-list .form-control {
     display: inline-block;
     width: 220px;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 .common-list select.form-control {
    width: 100px;
@@ -138,7 +138,7 @@ body {
 }
 
 .common-list .input-wrap + ul {
-    margin-left: 30px;
+    /*margin-left: 30px;*/
 }
 /*
  * Case Page
@@ -148,19 +148,26 @@ body {
 }
 .case-table-wrapper .common-list .text {
     display: inline-block;
-    min-width: 50px;
+    min-width: 75px;
     margin-right: 10px;
     white-space:nowrap;
 }
+.case-table-wrapper .common-list strong.text {
+   min-height: 34px;line-height: 34px;padding-left: 5px;
+}
+
 .case-table-wrapper .common-list {
     position: relative;
+    background-color: #fff;
+    padding:20px;
+      box-shadow: 1px 1px 1px 0 rgba(0,0,0,.07),1px 2px 5px 0 rgba(0,0,0,.06);
 }
 .case-table-wrapper ul,
 .case-table-wrapper li {
     position: relative;
     list-style: none;
 }
-.case-table-wrapper .common-list ul li::before {
+/*.case-table-wrapper .common-list ul li::before {
     content: ' ';
     position: absolute;
     top: 17px;
@@ -178,12 +185,12 @@ body {
     height: -webkit-calc(100% - 20px);
     height: calc(100% - 20px);
     background: #000;
-}
+}*/
 .case-table-wrapper .common-list ul>li::after {
     /*display: none;*/
 }
 .case-table-wrapper .common-list ul {
-    padding-left: 40px;
+   /* padding-left: 40px;*/
 }
 .case-table-wrapper .common-list .list-tree {
     padding-left: 80px;
@@ -294,3 +301,11 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 .form-control[disabled], fieldset[disabled] .form-control { cursor: not-allowed; }
 .form-control { background: #fff; border-radius: 0; border: 1px solid #dce1e4; box-shadow: none !important; font-size: 13px; padding: 4px 10px !important; -webkit-transition: all .2s ease-in-out; -moz-transition: all .2s ease-in-out; -o-transition: all .2s ease-in-out; transition: all .2s ease-in-out; }
 .form-control[disabled] { background: #f7f7f7; border-color: #d2d7db;}
+
+
+/*star folder-ui*/
+.folder-ui {padding-left: 20px;}
+.folder-ui .input-wrap + ul {margin-left: 30px;}
+.folder-ui .input-wrap + ul,.folder-ui .input-wrap + ul .input-wrap{position: relative;}
+.folder-ui .input-wrap + ul:before{position: absolute;left:-30px;top:0;content:"";height: 100%;border-left:1px dashed #22baa0;}
+.folder-ui .input-wrap + ul .input-wrap:after {position: absolute;left:-30px;top:17px;content:"";width: 30px;height: 1px;border-top:1px dashed #22baa0;}
