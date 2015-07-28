@@ -9,5 +9,5 @@ block content
             .dropzone
                 form(action="uploadhandler", id="uploadForm" method="post", enctype = "multipart/form-data", target="uploadTrg")
                     .file
-                        input(type="file", name="contractfile")
+                        input.js-file-input(type="file", name="contractfile")
                     input.btn.btn-sm.btn-success(type="submit", id="submit", value="上传")

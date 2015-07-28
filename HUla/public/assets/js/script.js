@@ -1228,8 +1228,12 @@
       var uploadframe = $uploadPage.find("#uploadTrg");
       var uploadform = $uploadPage.find("#uploadForm");
       var submitbtn = $uploadPage.find('#submit');
+      var fileInput = uploadform.find('.js-file-input');
 
       submitbtn.on('click', function(){
+        if (!fileInput.val()) {
+            return false;
+        }
         UI.showLoading();
       });
       uploadframe.on('load', function(){
