@@ -305,7 +305,7 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 
 /*star folder-ui*/
 .folder-ui {padding-left: 20px;}
-.folder-ui .input-wrap ~ ul .input-wrap { -webkit-animation-duration: 1s; animation-duration: 1s; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-name: fadeInDown; animation-name: fadeInDown;}
+.folder-ui .input-wrap ~ ul .input-wrap { -webkit-animation-duration: 1s; animation-duration: 1s; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-name: fadeIn; animation-name: fadeIn;}
 .folder-ui .input-wrap .form-control {border-radius: 3px;}
 .folder-ui .input-wrap + ul:not(.list-tree) {margin-left: 40px;padding-top: 10px;margin-top: -10px;}
 .folder-ui .input-wrap + ul:not(.list-tree):before{-webkit-transition:all 550ms linear;position: absolute;left:-30px;top:0;  bottom: 28px;content:"";border-left:2px solid #22baa0;}
@@ -321,23 +321,12 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both
 }
-@-webkit-keyframes fadeInDown {
+@-webkit-keyframes fadeIn {
     0% {
-        opacity: 0;z-index: -1;
-        -webkit-transform: translate3d(0,-100%,0);
-        transform: translate3d(0,-100%,0)
+        opacity: 0
     }
-    90% {z-index: -1;}
+
     100% {
-        opacity: 1;
-        z-index: 0;
-        -webkit-transform: none;
-        transform: none
+        opacity: 1
     }
-}
-
-
-.fadeInDown {
-    -webkit-animation-name: fadeInDown;
-    animation-name: fadeInDown
 }
