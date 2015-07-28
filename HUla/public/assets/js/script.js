@@ -1167,7 +1167,7 @@
                                     str += '<p>' + data.msg + '</p>';
                                 }
 
-                                str += '<table><tr><th>Key</th><th>期望值</th><th>实际值</th></tr>';
+                                str += '<table class="table table-full"><thead><tr><th width="10%">Key</th><th width="45%">期望值</th><th width="45%">实际值</th></tr></thead><tbody>' ;
 
                                 var v = null;
                                 for (var k in errorRenderObj) {
@@ -1175,7 +1175,7 @@
                                     str += '<tr><td>' + v.key + '</td><td>' + v.a + '</td><td>' + v.b + '</td></tr>';
                                 }
 
-                                str += '</table>';
+                                str += '</tbody></table>';
 
                                 $detailElm.html(str);
                             }

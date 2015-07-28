@@ -305,12 +305,39 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 
 /*star folder-ui*/
 .folder-ui {padding-left: 20px;}
-.folder-ui .input-wrap .form-control {border-radius: 5px;}
+.folder-ui .input-wrap ~ ul .input-wrap { -webkit-animation-duration: 1s; animation-duration: 1s; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-name: fadeInDown; animation-name: fadeInDown;}
+.folder-ui .input-wrap .form-control {border-radius: 3px;}
 .folder-ui .input-wrap + ul:not(.list-tree) {margin-left: 40px;padding-top: 10px;margin-top: -10px;}
-.folder-ui .input-wrap + ul:not(.list-tree):before{position: absolute;left:-30px;top:0;  bottom: 28px;content:"";border-left:2px solid #22baa0;}
+.folder-ui .input-wrap + ul:not(.list-tree):before{-webkit-transition:all 550ms linear;position: absolute;left:-30px;top:0;  bottom: 28px;content:"";border-left:2px solid #22baa0;}
 .folder-ui .input-wrap + ul,.folder-ui .input-wrap + ul .input-wrap{position: relative;}
 .folder-ui .input-wrap ~ ul .input-wrap:after {position: absolute;left:-30px;top:17px;content:"";width: 30px;height: 1px;border-top:1px dashed #22baa0;}
 /*.folder-ui .list-tree:before{position: absolute;left:50px;top:17px;content:"";height: 50%;border-left:1px dashed #22baa0;}*/
 .folder-ui li .input-wrap ~ ul .input-wrap:before{position: absolute;left:-35px;top:10px;width: 12px;height: 12px; background-color: #22baa0; content:"";border-radius: 50%}
 .folder-ui .list-tree:after{position: absolute;left:50px;top:-18px;bottom:28px;content:"";border-right:1px dashed #22baa0;}
 
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}
+@-webkit-keyframes fadeInDown {
+    0% {
+        opacity: 0;z-index: -1;
+        -webkit-transform: translate3d(0,-100%,0);
+        transform: translate3d(0,-100%,0)
+    }
+    90% {z-index: -1;}
+    100% {
+        opacity: 1;
+        z-index: 0;
+        -webkit-transform: none;
+        transform: none
+    }
+}
+
+
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown
+}
