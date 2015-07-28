@@ -1158,7 +1158,6 @@
 
       submitbtn.on('click', function(){
         UI.showLoading();
-        uploadForm.submit();
       });
       uploadframe.on('load', function(){
         var html = uploadframe && uploadframe[0] && uploadframe[0].contentDocument.body.innerHTML;
