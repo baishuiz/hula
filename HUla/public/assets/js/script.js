@@ -685,6 +685,7 @@
         // 删除
         $serviceTable.on('click', '.js-delete', function (e) {
             return confirm('将同时删除对应的契约及用例，确认删除？');
+            
         });
 
         // select all
