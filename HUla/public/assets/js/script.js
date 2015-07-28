@@ -79,8 +79,11 @@
                 if (!status) {
                     errorStack.push({
                         key: postKey,
+                        a: a,
+                        b: b,
                         aStack: aStack,
-                        bStack: bStack
+                        bStack: bStack,
+                        reason: '0'
                     });
                 }
                 if (typeof postKey !== 'undefined') {
@@ -96,8 +99,11 @@
                 if (!status) {
                     errorStack.push({
                         key: postKey,
+                        a: a,
+                        b: b,
                         aStack: aStack,
-                        bStack: bStack
+                        bStack: bStack,
+                        reason: 'null'
                     });
                 }
                 if (typeof postKey !== 'undefined') {
@@ -115,8 +121,11 @@
             if (className !== toString.call(b)) {
                 errorStack.push({
                     key: postKey,
+                    a: a,
+                    b: b,
                     aStack: aStack,
-                    bStack: bStack
+                    bStack: bStack,
+                    reason: 'type'
                 });
                 if (typeof postKey !== 'undefined') {
                     return {
@@ -136,8 +145,11 @@
                     if (!status) {
                         errorStack.push({
                             key: postKey,
+                            a: a,
+                            b: b,
                             aStack: aStack,
-                            bStack: bStack
+                            bStack: bStack,
+                            reason: 'string'
                         });
                     }
                     if (typeof postKey !== 'undefined') {
@@ -154,8 +166,11 @@
                         if (!status) {
                             errorStack.push({
                                 key: postKey,
+                                a: a,
+                                b: b,
                                 aStack: aStack,
-                                bStack: bStack
+                                bStack: bStack,
+                                reason: 'num1'
                             });
                         }
                         if (typeof postKey !== 'undefined') {
@@ -171,8 +186,11 @@
                     if (!status) {
                         errorStack.push({
                             key: postKey,
+                            a: a,
+                            b: b,
                             aStack: aStack,
-                            bStack: bStack
+                            bStack: bStack,
+                            reason: 'num2'
                         });
                     }
                     if (typeof postKey !== 'undefined') {
@@ -190,8 +208,11 @@
                     if (!status) {
                         errorStack.push({
                             key: postKey,
+                            a: a,
+                            b: b,
                             aStack: aStack,
-                            bStack: bStack
+                            bStack: bStack,
+                            reason: 'date'
                         });
                     }
                     if (typeof postKey !== 'undefined') {
@@ -207,8 +228,11 @@
                 if (typeof a != 'object' || typeof b != 'object') {
                     errorStack.push({
                         key: postKey,
+                        a: a,
+                        b: b,
                         aStack: aStack,
-                        bStack: bStack
+                        bStack: bStack,
+                        reason: 'object'
                     });
                     if (typeof postKey !== 'undefined') {
                         return {
@@ -226,8 +250,11 @@
                                                         && ('constructor' in a && 'constructor' in b)) {
                     errorStack.push({
                         key: postKey,
+                        a: a,
+                        b: b,
                         aStack: aStack,
-                        bStack: bStack
+                        bStack: bStack,
+                        reason: 'constructor'
                     });
                     if (typeof postKey !== 'undefined') {
                         return {
@@ -252,8 +279,11 @@
                     var status = bStack[length] === b;
                     !status && errorStack.push({
                         key: postKey,
+                        a: a,
+                        b: b,
                         aStack: aStack,
-                        bStack: bStack
+                        bStack: bStack,
+                        reason: 'array'
                     });
                     if (typeof postKey !== 'undefined') {
                         return {
@@ -275,8 +305,11 @@
                 if (length !== b.length) {
                     errorStack.push({
                         key: postKey,
+                        a: a,
+                        b: b,
                         aStack: aStack,
-                        bStack: bStack
+                        bStack: bStack,
+                        reason: 'arraylength'
                     });
                     if (typeof postKey !== 'undefined') {
                         return {
@@ -292,8 +325,11 @@
                         errorStack = isEqual.errorStack;
                         errorStack.push({
                             key: postKey,
+                            a: a[key],
+                            b: b[key],
                             aStack: aStack,
-                            bStack: bStack
+                            bStack: bStack,
+                            reason: 'deeparray'
                         });
                         // return false;
                     }
@@ -313,8 +349,11 @@
                         errorStack = isEqual.errorStack;
                         errorStack.push({
                             key: key,
+                            a: a[key],
+                            b: b[key],
                             aStack: aStack,
-                            bStack: bStack
+                            bStack: bStack,
+                            reason: 'deepobject'
                         });
                         // return false;
                     }
@@ -865,6 +904,11 @@
             var NO = $casePage.attr('data-no');
             var ajaxStr = id ? 'put' : 'post';
 
+            if (_.isEmpty(name) || _.isEmpty(reqData) || _.isEmpty(resData)) {
+                UI.showError('input empty');
+                return;
+            }
+
             UI.showLoading();
             Ajax[ajaxStr]('/restapi/case/' + (id || ''), {
                 con_id: con_id,
@@ -1070,7 +1114,7 @@
                     $statusElm.text('发送中...');
 
                     if (caseObj) {
-                        var req = caseObj.req;
+                        var req = caseObj.req || {};
                         var alliance = req && req.alliance;
                         if (!alliance || !alliance.sid || !alliance.ouid || !alliance.aid) {
                             delete req.alliance;
@@ -1091,20 +1135,49 @@
 
                         Ajax.post(url, req, function (data) {
                             data = data || {};
+                            var ackError = data.ResponseStatus && data.ResponseStatus.Ack && data.ResponseStatus.Ack > 0;
                             delete data.head;
                             delete data.ResponseStatus;
 
-                            var isEqual = Util.isEqual(caseObj.res, data);
-                            var errorStrAry = _.uniq(_.compact(_.pluck(isEqual.errorStack, 'key')));
+                            var isEqual = Util.isEqual(caseObj.res, data) || {errorStack: []};
 
-                            if (!errorStrAry || !errorStrAry.length) {
+                            var errorRenderObj = {};
+                            _.each(isEqual.errorStack, function (v) {
+                                var key = v.key;
+                                if (errorRenderObj[key]) {
+                                    return;
+                                }
+
+                                errorRenderObj[key] = {
+                                    key: key,
+                                    a: JSON.stringify(v.a || undefined),
+                                    b: JSON.stringify(v.b || undefined)
+                                }
+                            });
+
+                            if (_.isEmpty(errorRenderObj) && !ackError) {
                                 $caseElm.removeClass('warning').addClass('success');
                                 $statusElm.text('成功');
                                 $detailElm.text('');
                             } else {
                                 $caseElm.addClass('danger');
                                 $statusElm.text('失败');
-                                $detailElm.text((data.msg ? (data.msg + '  ') : '') + errorStrAry.join(', '));
+                                var str = '';
+                                if (data.msg) {
+                                    str += '<p>' + data.msg + '</p>';
+                                }
+
+                                str += '<table><tr><th>Key</th><th>期望值</th><th>实际值</th></tr>';
+
+                                var v = null;
+                                for (var k in errorRenderObj) {
+                                    v = errorRenderObj[k];
+                                    str += '<tr><td>' + v.key + '</td><td>' + v.a + '</td><td>' + v.b + '</td></tr>';
+                                }
+
+                                str += '</table>';
+
+                                $detailElm.html(str);
                             }
                             sentReq(i + 1);
                         }, function (error) {
