@@ -194,6 +194,7 @@ body {
 }
 .case-table-wrapper .common-list .list-tree {
     padding-left: 80px;
+    margin-bottom: 20px;
 }
 /*.case-table-wrapper .common-list .list-tree::before {
     content: ' ';
@@ -310,5 +311,5 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 .folder-ui .input-wrap + ul,.folder-ui .input-wrap + ul .input-wrap{position: relative;}
 .folder-ui .input-wrap ~ ul .input-wrap:after {position: absolute;left:-30px;top:17px;content:"";width: 30px;height: 1px;border-top:1px dashed #22baa0;}
 /*.folder-ui .list-tree:before{position: absolute;left:50px;top:17px;content:"";height: 50%;border-left:1px dashed #22baa0;}*/
-.folder-ui .list-tree:after{position: absolute;left:50px;top:17px;content:"";height: 45px;border-right:1px dashed #22baa0;}
-.folder-ui .list-tree:before {position: absolute;left:10px;top:40px;content:"";width:40px;height: 1px;border-top:1px dashed #22baa0;}
+.folder-ui .list-tree:after{position: absolute;left:50px;top:-18px;content:"";height: 90%;border-right:1px dashed #22baa0;}
+/*.folder-ui .list-tree:before {position: absolute;left:10px;top:40px;content:"";width:40px;height: 1px;border-top:1px dashed #22baa0;}*/
