@@ -150,7 +150,7 @@ body {
     display: inline-block;
     min-width: 75px;
     margin-right: 10px;
-    white-space:nowrap;
+    /*white-space:nowrap;*/
 }
 .case-table-wrapper .common-list strong.text {
    min-height: 34px;line-height: 34px;padding-left: 5px;
