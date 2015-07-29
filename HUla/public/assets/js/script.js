@@ -685,13 +685,19 @@
         // 删除
         $serviceTable.on('click', '.js-delete', function (e) {
             return confirm('将同时删除对应的契约及用例，确认删除？');
-            
+
         });
 
         // select all
         $serviceTable.on('click', '.js-select-all', function (e) {
             e.preventDefault();
-            $serviceTable.find('.js-check').trigger('click');
+            var $total = $serviceTable.find('.js-check');
+            var $checked = $total.not(':checked');
+            if ($checked.length) {
+                $checked.trigger('click');
+            } else {
+                $total.trigger('click');
+            }
         });
 
         // delete all
@@ -1037,7 +1043,13 @@
         // select all
         $casePage.on('click', '.js-select-all', function (e) {
             e.preventDefault();
-            $casePage.find('.js-check').trigger('click');
+            var $total = $casePage.find('.js-check');
+            var $checked = $total.not(':checked');
+            if ($checked.length) {
+                $checked.trigger('click');
+            } else {
+                $total.trigger('click');
+            }
         });
 
         $caseRunForm = $('#case-run-form');
