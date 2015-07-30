@@ -848,14 +848,15 @@
                         val = $.trim($inputWrap.find('.js-input').val()) || null;
                         break;
                     case 'Number':
-                        var tmpNum = parseInt($.trim($inputWrap.find('.js-input').val()), 10);
+                        var numStr = $.trim($inputWrap.find('.js-input').val());
+                        var tmpNum = numStr && Number(numStr);
 
                         val = (typeof tmpNum === 'number' && !Number.isNaN(tmpNum)) ? tmpNum : null;
                         break;
                     case 'Boolean':
                         var boolStr = $.trim($inputWrap.find('.js-boolean').val());
                         if (boolStr) {
-                            val = parseInt(boolStr, 10) === 1;
+                            val = Number(boolStr) === 1;
                         } else {
                             val = null;
                         }
