@@ -70,7 +70,7 @@ var dataHelp = {
       }
 
       var request = dataStructure(sheet.data, startIndex, requestCount);
-      var response = dataStructure(sheet.data, requestCount+1, endIndex);
+      var response = dataStructure(sheet.data, requestCount, endIndex);
 
       //获取服务对象的rest url
       if(serverurlmap && serverurlmap.length){
