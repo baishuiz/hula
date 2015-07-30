@@ -1056,6 +1056,18 @@
             }
         });
 
+        // case folder btn
+        $casePage.on('click', '.js-folder-slide-btn', function (e) {
+            var $target = $(this);
+            if ($target.hasClass('js-active')) {
+                $target.removeClass('js-active').text('+');
+                $target.parent().siblings('ul').slideDown();
+            } else {
+                $target.addClass('js-active').text('-');
+                $target.parent().siblings('ul').slideUp();
+            }
+        });
+
         $caseRunForm = $('#case-run-form');
 
         // run case
