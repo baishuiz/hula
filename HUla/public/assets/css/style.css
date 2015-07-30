@@ -314,7 +314,7 @@ input[disabled] { background: #f7f7f7; border-color: #d2d7db; }
 /*.folder-ui .list-tree:before{position: absolute;left:50px;top:17px;content:"";height: 50%;border-left:1px dashed #22baa0;}*/
 .folder-ui li .input-wrap ~ ul .input-wrap:before{position: absolute;left:-35px;top:10px;width: 12px;height: 12px; background-color: #22baa0; content:"";border-radius: 50%}
 /*折叠树*/
-.folder-tree { position: absolute; left: -40px; top: 6px; color: #fff;text-align: center; width: 20px; height: 20px; z-index: 99; }/*<i class="folder-tree"></i>*/
+.folder-tree { position: absolute; left: -40px; top: 6px; color: #fff;text-align: center; width: 20px; height: 20px; z-index: 99; }
 
 
 .folder-ui .list-tree:after{position: absolute;left:50px;top:-18px;bottom:28px;content:"";border-right:2px solid #22baa0;}
