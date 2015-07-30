@@ -951,49 +951,52 @@
             }
             var str = [];
             parentNode = parentNode || {};
-            for (var i = 0, len = ary.length, v, isFirst, isList, subNode; i < len; i++) {
+            for (var i = 0, len = ary.length, v, isFirst, isList, subNode, needSub; i < len; i++) {
                 v = ary[i];
                 isFirst = i === 0;
                 isList = v.metadata === 'List';
                 subNode = parentNode[v.key];
+                needSub = v.metadata === 'Object' || isList;
                 str.push('<li>');
-                        str.push('<div class="line"></div>');
-                        str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
-                            str.push('<strong class="text">' + (v.key || '') + '</strong>');
-                            str.push('<span class="text">' + (v.remark || '') + '</span>');
-                            if (v.metadata === 'String'){
-                                str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + Util.convert(subNode || '') + '">');
-                            } else if (v.metadata === 'Number') {
-                                str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + ((typeof subNode === 'number' && !Number.isNaN(subNode)) ? subNode : null) + '">');
-                            } else if (v.metadata === 'Boolean') {
-                                str.push('<select class="js-boolean">');
-                                    str.push('<option></option>');
-                                    str.push('<option value="1" ' + ((subNode === true) ? 'selected' : '') + '>True</option>');
-                                    str.push('<option value="0" ' + ((subNode === false) ? 'selected' : '') + '>False</option>');
-                                str.push('</select>');
-                            } else if (v.metadata === 'Array') {
-                                str.push('<input type="text" class="js-input form-control" placeholder="Array" value="' + (subNode || []).join(',') + '">');
-                            }
-                            if (isList) {
-                               str.push('<button class="js-add btn btn-xs btn-success">add</button>');
-                            }
-                            if (parentIsList && i === 0) {
-                               str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete</button>');
-                            }
-                        str.push('</div>');
-                        if (v.metadata === 'Object' || isList) {
-                            if (Array.isArray(subNode)) {
-                                subNode.forEach(function(tmpNode){
-                                    str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
-                                        str.push(loop(v.value, isList, tmpNode));
-                                    str.push('</ul>');
-                                });
-                            } else {
-                                str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
-                                    str.push(loop(v.value, isList, subNode));
-                                str.push('</ul>');
-                            }
+                    str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
+                        if (needSub) {
+                            str.push('<i class="folder-tree">-</i>');
                         }
+                        str.push('<strong class="text">' + (v.key || '') + '</strong>');
+                        str.push('<span class="text">' + (v.remark || '') + '</span>');
+                        if (v.metadata === 'String'){
+                            str.push('<input type="text" class="js-input form-control" placeholder="String" value="' + Util.convert(subNode || '') + '">');
+                        } else if (v.metadata === 'Number') {
+                            str.push('<input type="number" class="js-input form-control" placeholder="Number" min="0" value="' + ((typeof subNode === 'number' && !Number.isNaN(subNode)) ? subNode : null) + '">');
+                        } else if (v.metadata === 'Boolean') {
+                            str.push('<select class="js-boolean">');
+                                str.push('<option></option>');
+                                str.push('<option value="1" ' + ((subNode === true) ? 'selected' : '') + '>True</option>');
+                                str.push('<option value="0" ' + ((subNode === false) ? 'selected' : '') + '>False</option>');
+                            str.push('</select>');
+                        } else if (v.metadata === 'Array') {
+                            str.push('<input type="text" class="js-input form-control" placeholder="Array" value="' + (subNode || []).join(',') + '">');
+                        }
+                        if (isList) {
+                           str.push('<button class="js-add btn btn-xs btn-success">add</button>');
+                        }
+                        if (parentIsList && i === 0) {
+                           str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete</button>');
+                        }
+                    str.push('</div>');
+                    if (needSub) {
+                        if (Array.isArray(subNode)) {
+                            subNode.forEach(function(tmpNode){
+                                str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
+                                    str.push(loop(v.value, isList, tmpNode));
+                                str.push('</ul>');
+                            });
+                        } else {
+                            str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
+                                str.push(loop(v.value, isList, subNode));
+                            str.push('</ul>');
+                        }
+                    }
                 str.push('</li>')
             }
             return str.join('');

@@ -26,14 +26,17 @@ block content
         -       }
         -       var str = [];
         -       parentNode = parentNode || {};
-        -       for (var i = 0, len = ary.length, v, isFirst, isList, subNode; i < len; i++) {
+        -       for (var i = 0, len = ary.length, v, isFirst, isList, subNode, needSub; i < len; i++) {
         -           v = ary[i];
         -           isFirst = i === 0;
         -           isList = v.metadata === 'List';
         -           subNode = parentNode[v.key];
+        -           needSub = v.metadata === 'Object' || isList;
         -           str.push('<li>');
-        -                   str.push('<div class="line"></div>');
         -                   str.push('<div class="input-wrap" data-metadata="' + (v.metadata || '') + '" data-key="' + (v.key || '') + '" data-remark="' + (v.remark || '') + '">');
+        -                       if (needSub) {
+        -                           str.push('<i class="folder-tree">-</i>');
+        -                       }
         -                       str.push('<strong class="text">' + (v.key || '') + '</strong>');
         -                       str.push('<span class="text">' + (v.remark || '') + '</span>');
         -                       if (v.metadata === 'String'){
@@ -56,7 +59,7 @@ block content
         -                          str.push('<button class="js-delete btn-delete btn btn-xs btn-danger">delete</button>');
         -                       }
         -                   str.push('</div>');
-        -                   if (v.metadata === 'Object' || isList) {
+        -                   if (needSub) {
         -                       if (Array.isArray(subNode)) {
         -                           subNode.forEach(function(tmpNode){
         -                               str.push('<ul class="' + (isList ? "list-tree" : "") + '">');
