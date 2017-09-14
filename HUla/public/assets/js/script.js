@@ -1130,8 +1130,10 @@
                 var cid = Cookie.get('cid');
 
                 var sentReq = function (i) {
-                    var url = 'http://' + host + '/restapi/soa2/' + service.url + ( needSubEvn ? ('?subEnv=' + (subEnv || 'fat63')) : '');
-                    url += (needSubEvn ? '&' : '?') + '_fxpcqlniredt=' + cid;
+                    // var url = 'http://' + host + '/restapi/soa2/' + service.url + ( needSubEvn ? ('?subEnv=' + (subEnv || 'fat63')) : '');
+                    var url = 'https://m.cjia.com/restapi/svr/productsearch/product/searchListOpenDestination/0'
+
+                    // url += (needSubEvn ? '&' : '?') + '_fxpcqlniredt=' + cid;
 
                     i = i || 0;
                     var caseObj = cases[i];
@@ -1149,18 +1151,26 @@
                             delete req.alliance;
                         }
 
-                        $.extend(req, {
-                            contentType: 'json',
-                            head: {
-                                auth: auth || null,
-                                cid: cid,
-                                ctok: '',
-                                cver: '1.0',
-                                lang: '01',
-                                sid: '8888',
-                                syscode: '09'
-                            }
-                        });
+                        // $.extend(req, {
+                        //     contentType: 'json',
+                        //     head: {
+                        //         auth: auth || null,
+                        //         cid: cid,
+                        //         ctok: '',
+                        //         cver: '1.0',
+                        //         lang: '01',
+                        //         sid: '8888',
+                        //         syscode: '09'
+                        //     }
+                        // });
+
+
+                        // $.extend(req, {
+                        //     contentType: 'json',
+                        //     header:{"applicationCode":"portal-H5","clientId":"44cdd2cca8b64ee586a3ea7ef8bb009a","sourceId":"M0000009","exSourceId":"CJIA","channel":"CJIA","subChannel":"H5","version":"2.0.0","userToken":""}
+                        // });
+
+                        
 
                         Ajax.post(url, req, function (data) {
                             data = data || {};

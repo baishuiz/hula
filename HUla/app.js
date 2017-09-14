@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 global._ = global._ || require('underscore');
 
-var routes = require('./routes/index');
+
 // var contractRouter = require('./routes/contract');
 // var serviceRouter = require('./routes/service');
 // var caseRouter = require('./routes/case');
@@ -25,9 +25,13 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json({reviver:function(k,v){console.log(k,v) ; return v}}));
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json({ type: 'application/*+json' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var routes = require('./routes/index');
 
  app.use('/', routes);
 // app.use('/service', serviceRouter);
