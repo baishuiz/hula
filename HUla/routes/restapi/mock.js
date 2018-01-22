@@ -9,19 +9,30 @@ var contractFormat = require('../../libs/contractFormat');
 router.use('/mock', function(req, res, next) {  // GET 'http://www.example.com/mock/new'
 console.log(req.originalUrl); // '/mock/new'
 console.log(req.baseUrl); // '/mock'
-console.log(req.path); // '/new'
+console.log(req.body,"***************************"); // '/new'
+
 serviceModel.find({url:req.path}, null, function(error, result){
+
+  if(error || !result[0]){
+    res.json({msg:"服务未找到" + req.path})
+    return;
+  }
     var service = result[0];
 
     contractModel.find({srv_id:service._id}, null, function(error, result){
+        if(error || !result || !result[0]){
+          res.json({msg:"契约未找到" + req.path})
+          return;
+        }
         result = result || [];
         var con_id = result[0]._id;
         // console.log(req.body.productSearchChannelCode);
         // res.send(req.body);
+        console.log(req.body,"************************************")
         caseModel.find({ con_id: con_id, req: req.body }, null, function(error, result){
             // TODO 格式转换
 
-            res.json(result[0] ? result[0].res : {msg:"未匹配到响应数据"});
+            res.json(result[0] ? result[0].res : {msg:"未匹配到请求数据"});
         });
     });
 
@@ -38,11 +49,11 @@ function validReq(req, contract){
        switch(key){
          case  'Number' :
            result = _.isNumber(req[key]);
-           break; 
+           break;
        }
-       
+
        if(!result){
-           
+
            return result;
        }
    }
